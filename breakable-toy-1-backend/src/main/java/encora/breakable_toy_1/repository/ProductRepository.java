@@ -2,6 +2,7 @@ package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface ProductRepository {
@@ -10,10 +11,10 @@ public interface ProductRepository {
 
      List<Product> getAllProducts();
 
-     void create();
+     void create(String category, String name, double price, LocalDate date, long stock);
 
-     void delete();
+     void delete(long id);
 
-     Product update();
+     Product update(Product product);
 
 }

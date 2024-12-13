@@ -28,5 +28,10 @@ public record Product(long id,String category, String name,
         public Product build() {
             return new Product(id, category, name, price, date, stock);
         }
+
+    }
+
+    public long getId() {
+        return this.id;
     }
 }
