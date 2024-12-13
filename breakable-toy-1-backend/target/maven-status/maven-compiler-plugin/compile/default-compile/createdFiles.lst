@@ -1,4 +1,8 @@
 encora/breakable_toy_1/BreakableToy1Application.class
 encora/breakable_toy_1/model/Product$Builder.class
-encora/breakable_toy_1/controller/ProductController.class
 encora/breakable_toy_1/model/Product.class
+encora/breakable_toy_1/service/ProductServiceImpl.class
+encora/breakable_toy_1/service/ProductService.class
+encora/breakable_toy_1/repository/ProductRepository.class
+encora/breakable_toy_1/repository/ProductRepositoryInMemoryImpl.class
+encora/breakable_toy_1/controller/ProductController.class
