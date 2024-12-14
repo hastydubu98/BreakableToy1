@@ -11,7 +11,7 @@ public interface ProductRepository {
 
      List<Product> getAllProducts();
 
-     void create(String category, String name, double price, LocalDate date, long stock);
+     void create(String category, String name, double price, long stock);
 
      void delete(long id);
 

@@ -1,6 +1,8 @@
 package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
+import org.slf4j.spi.LocationAwareLogger;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -36,9 +38,11 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public void create(String category, String name, double price, LocalDate date, long stock) {
+    public void create(String category, String name, double price, long stock) {
 
-        Product product = new Product(counter.incrementAndGet(), category, name, price, date, stock);
+        LocalDate creation_date =  LocalDate.now();
+
+        Product product = new Product(counter.incrementAndGet(), category, name, price, creation_date, null, stock);
 
         products.add(product);
     }
@@ -51,6 +55,7 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     @Override
     public Product update(Product product) {
         Product oldProduct = getProduct(product.getId());
+        product = product.withUpdateDate(oldProduct.getCreationDate(), LocalDate.now());
         delete(oldProduct.getId());
         products.add(product);
         return product;
@@ -126,86 +131,6 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
                 29.99, 129.99, 199.99, 15.99  // Smart Home Devices
         );
 
-        List<LocalDate> PRODUCT_DATES = Arrays.asList(
-                LocalDate.of(2023, 5, 15),  // Mobile Accessories
-                LocalDate.of(2022, 11, 1),  // Mobile Accessories
-                LocalDate.of(2023, 7, 20),  // Mobile Accessories
-                LocalDate.of(2023, 3, 10),  // Mobile Accessories
-                LocalDate.of(2021, 12, 5),  // Home Appliances
-                LocalDate.of(2023, 6, 30),  // Home Appliances
-                LocalDate.of(2020, 8, 25),  // Home Appliances
-                LocalDate.of(2023, 9, 14),  // Home Appliances
-                LocalDate.of(2022, 4, 22),  // Computer Peripherals
-                LocalDate.of(2021, 5, 16),  // Computer Peripherals
-                LocalDate.of(2023, 8, 10),  // Computer Peripherals
-                LocalDate.of(2023, 1, 1),   // Computer Peripherals
-                LocalDate.of(2022, 7, 5),   // Office Furniture
-                LocalDate.of(2023, 5, 25),  // Office Furniture
-                LocalDate.of(2023, 3, 15),  // Office Furniture
-                null,                       // Office Furniture
-                LocalDate.of(2023, 10, 1),  // Kitchen Essentials
-                LocalDate.of(2022, 2, 18),  // Kitchen Essentials
-                LocalDate.of(2021, 9, 12),  // Kitchen Essentials
-                LocalDate.of(2020, 5, 25),  // Kitchen Essentials
-                LocalDate.of(2022, 12, 15), // Health and Beauty
-                LocalDate.of(2023, 4, 22),  // Health and Beauty
-                LocalDate.of(2021, 6, 18),  // Health and Beauty
-                null,                       // Health and Beauty
-                LocalDate.of(2023, 8, 1),   // Electronics Gadgets
-                LocalDate.of(2023, 6, 15),  // Electronics Gadgets
-                null,                       // Electronics Gadgets
-                LocalDate.of(2022, 3, 10),  // Electronics Gadgets
-                LocalDate.of(2021, 10, 5),  // Automotive Parts
-                null,                       // Automotive Parts
-                LocalDate.of(2023, 7, 25),  // Automotive Parts
-                LocalDate.of(2022, 12, 30), // Automotive Parts
-                LocalDate.of(2022, 5, 19),  // Pet Supplies
-                null,                       // Pet Supplies
-                LocalDate.of(2023, 8, 15),  // Pet Supplies
-                LocalDate.of(2021, 11, 8),  // Pet Supplies
-                LocalDate.of(2023, 2, 22),  // Outdoor Gear
-                LocalDate.of(2023, 9, 12),  // Outdoor Gear
-                LocalDate.of(2021, 12, 1),  // Outdoor Gear
-                null,                       // Outdoor Gear
-                LocalDate.of(2022, 6, 10),  // Fashion Apparel
-                LocalDate.of(2023, 5, 20),  // Fashion Apparel
-                LocalDate.of(2021, 7, 12),  // Fashion Apparel
-                null,                       // Fashion Apparel
-                LocalDate.of(2023, 4, 14),  // Sports Equipment
-                null,                       // Sports Equipment
-                LocalDate.of(2022, 3, 25),  // Sports Equipment
-                LocalDate.of(2023, 1, 1),   // Sports Equipment
-                LocalDate.of(2021, 6, 8),   // Baby Products
-                LocalDate.of(2023, 9, 1),   // Baby Products
-                LocalDate.of(2022, 4, 5),   // Baby Products
-                null,                       // Baby Products
-                LocalDate.of(2023, 6, 7),   // Grocery Items
-                LocalDate.of(2021, 10, 19), // Grocery Items
-                LocalDate.of(2022, 12, 15), // Grocery Items
-                LocalDate.of(2023, 3, 10),  // Grocery Items
-                null,                       // Books and Stationery
-                LocalDate.of(2022, 1, 15),  // Books and Stationery
-                LocalDate.of(2023, 8, 25),  // Books and Stationery
-                LocalDate.of(2023, 4, 10),  // Books and Stationery
-                LocalDate.of(2023, 7, 1),   // Fitness Equipment
-                LocalDate.of(2021, 9, 18),  // Fitness Equipment
-                LocalDate.of(2022, 11, 11), // Fitness Equipment
-                LocalDate.of(2023, 5, 5),   // Fitness Equipment
-                LocalDate.of(2022, 8, 20),  // Gaming Consoles
-                null,                       // Gaming Consoles
-                LocalDate.of(2023, 7, 10),  // Gaming Consoles
-                LocalDate.of(2021, 10, 30), // Gaming Consoles
-                LocalDate.of(2023, 6, 5),   // Musical Instruments
-                LocalDate.of(2022, 11, 8),  // Musical Instruments
-                null,                       // Musical Instruments
-                LocalDate.of(2021, 12, 25), // Musical Instruments
-                LocalDate.of(2023, 9, 12),  // Personal Care Products
-                null,                       // Personal Care Products
-                LocalDate.of(2021, 10, 7),  // Personal Care Products
-                LocalDate.of(2022, 1, 10),  // Personal Care Products
-                LocalDate.of(2023, 3, 25)   // Smart Home Devices
-        );
-
         List<Long> PRODUCT_STOCKS = Arrays.asList(
                 150L, 300L, 450L, 120L,  // Mobile Accessories
                 25L, 40L, 15L, 30L,      // Home Appliances
@@ -230,7 +155,7 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
         );
 
         for (int i = 0; i < 20; i++) {
-            create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), PRODUCT_DATES.get(i), PRODUCT_STOCKS.get(i));
+            create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), PRODUCT_STOCKS.get(i));
         }
 
     }
