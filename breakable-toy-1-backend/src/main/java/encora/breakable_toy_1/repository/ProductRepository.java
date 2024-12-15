@@ -18,6 +18,8 @@ public interface ProductRepository {
 
      Product update(long id, Product product);
 
+     void outOfStock(long id);
+
      void dummyData();
 
 }

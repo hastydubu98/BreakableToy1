@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicLong;
 @Repository
 public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
-    private ArrayList<Product> products;
+    private final ArrayList<Product> products;
     private final AtomicLong counter = new AtomicLong();
 
     public ProductRepositoryInMemoryImpl() {
@@ -60,6 +60,15 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
         delete(oldProduct.getId());
         products.add(product);
         return product;
+    }
+
+    @Override
+    public void outOfStock(long id) {
+        Product oldProduct = getProduct(id);
+        Product product = oldProduct;
+        product = product.outOfStock(id);
+        delete(oldProduct.getId());
+        products.add(product);
     }
 
     public void dummyData () {

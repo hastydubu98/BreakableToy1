@@ -40,4 +40,9 @@ public class ProductController {
     public void updateProduct(@PathVariable long id, @RequestBody Product product) {
         productRepository.update(id, product);
     }
+
+    @PostMapping("/products/{id}/outofstock")
+    public void  outOfStockProduct(@PathVariable long id) {
+        productRepository.outOfStock(id);
+    }
 }

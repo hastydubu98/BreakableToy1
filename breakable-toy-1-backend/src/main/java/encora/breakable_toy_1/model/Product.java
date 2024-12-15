@@ -49,4 +49,8 @@ public record Product(long id,String category, String name,
         return new Product(id, category, name, price, expirationDate, creationDate, updateDate, stock);
     }
 
+    public Product outOfStock(long id) {
+        return new Product(id, category, name, price, expirationDate, creationDate, updateDate, 0);
+    }
+
 }
