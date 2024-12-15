@@ -26,23 +26,28 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public void createProduct(@RequestParam String category, @RequestParam String name,
+    public Product createProduct(@RequestParam String category, @RequestParam String name,
                               @RequestParam double price, @RequestParam LocalDate expirationDate, @RequestParam long stock) {
-        productRepository.create(category, name, price, expirationDate, stock);
+        return productRepository.create(category, name, price, expirationDate, stock);
     }
 
     @DeleteMapping("/delete")
-    public void deleteProduct(@RequestParam long id) {
-        productRepository.delete(id);
+    public boolean deleteProduct(@RequestParam long id) {
+        return productRepository.delete(id);
     }
 
     @PutMapping("/products/{id}")
-    public void updateProduct(@PathVariable long id, @RequestBody Product product) {
-        productRepository.update(id, product);
+    public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
+        return productRepository.update(id, product);
     }
 
     @PostMapping("/products/{id}/outofstock")
-    public void  outOfStockProduct(@PathVariable long id) {
-        productRepository.outOfStock(id);
+    public Product  outOfStockProduct(@PathVariable long id) {
+        return productRepository.outOfStock(id);
+    }
+
+    @PutMapping("/products/{id}/instock")
+    public Product inStockProduct(@PathVariable long id) {
+        return productRepository.inStock(id);
     }
 }

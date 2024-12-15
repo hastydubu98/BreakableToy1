@@ -53,4 +53,8 @@ public record Product(long id,String category, String name,
         return new Product(id, category, name, price, expirationDate, creationDate, updateDate, 0);
     }
 
+    public Product inStock(long id) {
+        return new Product(id, category, name, price, expirationDate, creationDate, updateDate, 10);
+    }
+
 }

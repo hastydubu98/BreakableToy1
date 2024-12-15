@@ -12,13 +12,15 @@ public interface ProductRepository {
 
      List<Product> getAllProducts();
 
-     void create(String category, String name, double price, LocalDate expirationDate, long stock);
+     Product create(String category, String name, double price, LocalDate expirationDate, long stock);
 
-     void delete(long id);
+     boolean delete(long id);
 
      Product update(long id, Product product);
 
-     void outOfStock(long id);
+     Product outOfStock(long id);
+
+     Product inStock(long id);
 
      void dummyData();
 

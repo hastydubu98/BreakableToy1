@@ -38,7 +38,7 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public void create(String category, String name, double price, LocalDate expirationDate, long stock) {
+    public Product create(String category, String name, double price, LocalDate expirationDate, long stock) {
 
         LocalDate creationDate =  LocalDate.now();
 
@@ -46,11 +46,13 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
                 creationDate, null, stock);
 
         products.add(product);
+
+        return product;
     }
 
     @Override
-    public void delete(long id) {
-        products.removeIf(product -> product.getId() == id);
+    public boolean delete(long id) {
+        return products.removeIf(product -> product.getId() == id);
     }
 
     @Override
@@ -63,12 +65,23 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public void outOfStock(long id) {
+    public Product outOfStock(long id) {
         Product oldProduct = getProduct(id);
         Product product = oldProduct;
         product = product.outOfStock(id);
         delete(oldProduct.getId());
         products.add(product);
+        return product;
+    }
+
+    @Override
+    public Product inStock(long id) {
+        Product oldProduct = getProduct(id);
+        Product product = oldProduct;
+        product = product.inStock(id);
+        delete(oldProduct.getId());
+        products.add(product);
+        return product;
     }
 
     public void dummyData () {
