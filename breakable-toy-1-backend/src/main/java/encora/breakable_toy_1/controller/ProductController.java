@@ -25,27 +25,36 @@ public class ProductController {
         return productRepository.getProduct(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/products")
-    public Product createProduct(@RequestParam String category, @RequestParam String name,
-                              @RequestParam double price, @RequestParam LocalDate expirationDate, @RequestParam long stock) {
-        return productRepository.create(category, name, price, expirationDate, stock);
+    public Product createProduct(@RequestBody Product product) {
+        return productRepository.create(
+                product.getCategory(),
+                product.getName(),
+                product.getPrice(),
+                product.getExpirationDate(),
+                product.getStock());
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/delete")
     public boolean deleteProduct(@RequestParam long id) {
         return productRepository.delete(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
         return productRepository.update(id, product);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/products/{id}/outofstock")
     public Product  outOfStockProduct(@PathVariable long id) {
         return productRepository.outOfStock(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/products/{id}/instock")
     public Product inStockProduct(@PathVariable long id) {
         return productRepository.inStock(id);

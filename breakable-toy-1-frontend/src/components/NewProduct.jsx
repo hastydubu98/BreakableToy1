@@ -21,6 +21,35 @@ export default function BasicButtons() {
         setOpen(false);
       };
 
+    const handleSave = (e) => {
+        e.preventDefault();
+            const product = {
+                category: "Food",
+                name: "Watermelon",
+                price: 1.50,
+                expirationDate: "2025-05-15",
+                stock: 50
+            };
+            console.log("Clicked");
+            fetch("http://localhost:8080/products", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(product)
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error("Network response was not ok");
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    console.log("Product saved:", data);
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+        }
+
   return (
       <>
       <Container maxWidth="xl" className='margin'>
@@ -86,8 +115,8 @@ export default function BasicButtons() {
             />
             <TextField
               margin="dense"
-              id="date"
-              name="date"
+              id="expirationDate"
+              name="expirationDate"
               type="date"
               fullWidth
               variant="standard"
@@ -95,7 +124,7 @@ export default function BasicButtons() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Add</Button>
+            <Button onClick={handleSave} type="submit">Add</Button>
           </DialogActions>
       </Dialog>
       </>

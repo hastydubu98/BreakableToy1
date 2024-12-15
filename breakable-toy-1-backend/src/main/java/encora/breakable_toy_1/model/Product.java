@@ -41,6 +41,26 @@ public record Product(long id,String category, String name,
         return this.id;
     }
 
+    public String getCategory() {
+        return this.category;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public double getPrice() {
+        return this.price;
+    }
+
+    public LocalDate getExpirationDate() {
+        return this.expirationDate;
+    }
+
+    public long getStock() {
+        return this.stock;
+    }
+
     public LocalDate getCreationDate() {
         return this.creationDate;
     }
