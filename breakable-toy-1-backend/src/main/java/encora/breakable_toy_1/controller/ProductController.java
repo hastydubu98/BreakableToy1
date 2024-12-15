@@ -25,9 +25,10 @@ public class ProductController {
         return productRepository.getProduct(id);
     }
 
-    @PostMapping("/create")
-    public void createProduct(@RequestParam String category, @RequestParam String name, @RequestParam double price, @RequestParam long stock) {
-        productRepository.create(category, name, price, stock);
+    @PostMapping("/products")
+    public void createProduct(@RequestParam String category, @RequestParam String name,
+                              @RequestParam double price, @RequestParam LocalDate expirationDate, @RequestParam long stock) {
+        productRepository.create(category, name, price, expirationDate, stock);
     }
 
     @DeleteMapping("/delete")
@@ -35,8 +36,8 @@ public class ProductController {
         productRepository.delete(id);
     }
 
-    @PostMapping("/update")
-    public void updateProduct(@RequestBody Product product) {
-        productRepository.update(product);
+    @PutMapping("/products/{id}")
+    public void updateProduct(@PathVariable long id) {
+        System.out.println(id);
     }
 }

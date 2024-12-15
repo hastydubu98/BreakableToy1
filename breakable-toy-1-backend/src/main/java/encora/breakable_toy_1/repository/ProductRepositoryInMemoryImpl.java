@@ -38,11 +38,12 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public void create(String category, String name, double price, long stock) {
+    public void create(String category, String name, double price, LocalDate expirationDate, long stock) {
 
-        LocalDate creation_date =  LocalDate.now();
+        LocalDate creationDate =  LocalDate.now();
 
-        Product product = new Product(counter.incrementAndGet(), category, name, price, creation_date, null, stock);
+        Product product = new Product(counter.incrementAndGet(), category, name, price, expirationDate,
+                creationDate, null, stock);
 
         products.add(product);
     }
@@ -154,8 +155,31 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
                 80L, 100L, 250L, 90L     // Smart Home Devices
         );
 
+        List<LocalDate> EXPIRATION_DATES = Arrays.asList(
+                LocalDate.of(2025, 5, 15),    // Expiration date set
+                LocalDate.of(2024, 12, 1),    // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2026, 3, 30),    // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2024, 6, 15),    // Expiration date set
+                LocalDate.of(2027, 8, 10),    // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2024, 11, 30),   // Expiration date set
+                LocalDate.of(2023, 9, 1),     // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2025, 10, 22),   // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2024, 7, 5),     // Expiration date set
+                LocalDate.of(2026, 2, 18),    // Expiration date set
+                null,                         // No expiration date
+                LocalDate.of(2023, 12, 25),   // Expiration date set
+                LocalDate.of(2027, 4, 12),    // Expiration date set
+                LocalDate.of(2024, 1, 1),     // Expiration date set
+                null                          // No expiration date
+        );
+
         for (int i = 0; i < 20; i++) {
-            create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), PRODUCT_STOCKS.get(i));
+            create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), EXPIRATION_DATES.get(i), PRODUCT_STOCKS.get(i));
         }
 
     }
