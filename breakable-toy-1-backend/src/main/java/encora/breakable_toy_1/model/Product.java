@@ -45,7 +45,7 @@ public record Product(long id,String category, String name,
         return this.creationDate;
     }
 
-    public Product withUpdateDate(LocalDate creationDate, LocalDate updateDate) {
+    public Product withUpdateDate(long id, LocalDate creationDate, LocalDate updateDate) {
         return new Product(id, category, name, price, expirationDate, creationDate, updateDate, stock);
     }
 

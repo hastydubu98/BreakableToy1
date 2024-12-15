@@ -37,7 +37,7 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public void updateProduct(@PathVariable long id) {
-        System.out.println(id);
+    public void updateProduct(@PathVariable long id, @RequestBody Product product) {
+        productRepository.update(id, product);
     }
 }

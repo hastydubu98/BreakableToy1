@@ -54,9 +54,9 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public Product update(Product product) {
-        Product oldProduct = getProduct(product.getId());
-        product = product.withUpdateDate(oldProduct.getCreationDate(), LocalDate.now());
+    public Product update(long id, Product product) {
+        Product oldProduct = getProduct(id);
+        product = product.withUpdateDate(id, oldProduct.getCreationDate(), LocalDate.now());
         delete(oldProduct.getId());
         products.add(product);
         return product;
