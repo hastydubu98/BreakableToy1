@@ -8,7 +8,7 @@ public record Product(long id,String category, String name,
                       double price, LocalDate expirationDate, LocalDate creationDate, LocalDate updateDate, long stock) {
 
     //Builder
-    public static final class Builder {
+    public static class Builder {
 
         long id;
         String category;
@@ -51,6 +51,10 @@ public record Product(long id,String category, String name,
 
     public double getPrice() {
         return this.price;
+    }
+
+    public void setUpdateDate() {
+        this.updateDate =  LocalDate.now();
     }
 
     public LocalDate getExpirationDate() {

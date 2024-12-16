@@ -52,7 +52,7 @@ public class ProductController {
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/products/{id}/outofstock")
-    public Product  outOfStockProduct(@PathVariable long id) {
+    public Product outOfStockProduct(@PathVariable long id) {
         return productRepository.outOfStock(id);
     }
 
