@@ -4,20 +4,101 @@ import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
-public record Product(long id,String category, String name,
-                      double price, LocalDate expirationDate, LocalDate creationDate, LocalDate updateDate, long stock) {
+public class Product {
 
-    //Builder
+    private long id;
+    private String category;
+    private String name;
+    private double price;
+    private LocalDate expirationDate;
+    private LocalDate creationDate;
+    private LocalDate updateDate;
+    private long stock;
+
+    public Product(long id, String category, String name, double price,
+                   LocalDate expirationDate, LocalDate creationDate, LocalDate updateDate, long stock) {
+        this.id = id;
+        this.category = category;
+        this.name = name;
+        this.price = price;
+        this.expirationDate = expirationDate;
+        this.creationDate = creationDate;
+        this.updateDate = updateDate;
+        this.stock = stock;
+    }
+
+    // Getters
+    public long getId() {
+        return id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public LocalDate getExpirationDate() {
+        return expirationDate;
+    }
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public LocalDate getUpdateDate() {
+        return updateDate;
+    }
+
+    public long getStock() {
+        return stock;
+    }
+
+    // Setters
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
+    public void setExpirationDate(LocalDate expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public void setUpdateDate(LocalDate updateDate) {
+        this.updateDate = updateDate;
+    }
+
+    public void setStock(long stock) {
+        this.stock = stock;
+    }
+    
+    // Builder class
     public static class Builder {
-
-        long id;
-        String category;
-        String name;
-        double price;
-        LocalDate expirationDate;
-        LocalDate creationDate;
-        LocalDate updateDate;
-        long stock;
+        private long id;
+        private String category;
+        private String name;
+        private double price;
+        private LocalDate expirationDate;
+        private LocalDate creationDate;
+        private LocalDate updateDate;
+        private long stock;
 
         public Builder(long id, String category, String name, double price,
                        LocalDate expirationDate, LocalDate creationDate, LocalDate updateDate, long stock) {
@@ -34,48 +115,5 @@ public record Product(long id,String category, String name,
         public Product build() {
             return new Product(id, category, name, price, expirationDate, creationDate, updateDate, stock);
         }
-
     }
-
-    public long getId() {
-        return this.id;
-    }
-
-    public String getCategory() {
-        return this.category;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public double getPrice() {
-        return this.price;
-    }
-
-
-    public LocalDate getExpirationDate() {
-        return this.expirationDate;
-    }
-
-    public long getStock() {
-        return this.stock;
-    }
-
-    public LocalDate getCreationDate() {
-        return this.creationDate;
-    }
-
-    public Product withUpdateDate(long id, LocalDate creationDate, LocalDate updateDate) {
-        return new Product(id, category, name, price, expirationDate, creationDate, updateDate, stock);
-    }
-
-    public Product outOfStock(long id) {
-        return new Product(id, category, name, price, expirationDate, creationDate, updateDate, 0);
-    }
-
-    public Product inStock(long id) {
-        return new Product(id, category, name, price, expirationDate, creationDate, updateDate, 10);
-    }
-
 }
