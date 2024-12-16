@@ -69,8 +69,8 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
         Product oldProduct = getProduct(id);
         Product product = oldProduct;
         product = product.outOfStock(id);
-        delete(oldProduct.getId());
-        products.add(product);
+        int index = products.indexOf(oldProduct);
+        products.set(index, product);
         return product;
     }
 

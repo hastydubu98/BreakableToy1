@@ -53,9 +53,6 @@ public record Product(long id,String category, String name,
         return this.price;
     }
 
-    public void setUpdateDate() {
-        this.updateDate =  LocalDate.now();
-    }
 
     public LocalDate getExpirationDate() {
         return this.expirationDate;
