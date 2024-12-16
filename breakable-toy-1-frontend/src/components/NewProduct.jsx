@@ -24,11 +24,11 @@ export default function BasicButtons() {
     const handleSave = (e) => {
         e.preventDefault();
             const product = {
-                category: "Food",
-                name: "Watermelon",
-                price: 1.50,
-                expirationDate: "2025-05-15",
-                stock: 50
+                category: {category},
+                name: {name},
+                price: {price},
+                expirationDate: {expirationDate},
+                stock: {stock}
             };
             console.log("Clicked");
             fetch("http://localhost:8080/products", {
@@ -64,8 +64,24 @@ export default function BasicButtons() {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries(formData.entries());
-              const email = formJson.email;
-              console.log(email);
+              console.log("Clicked");
+                  fetch("http://localhost:8080/products", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify(formJson)
+                  })
+                      .then((response) => {
+                          if (!response.ok) {
+                              throw new Error("Network response was not ok");
+                          }
+                          return response.json();
+                      })
+                      .then((data) => {
+                          console.log("Product saved:", data);
+                      })
+                      .catch((error) => {
+                          console.error("Error:", error);
+                      });
               handleClose();
             },
           }}
@@ -125,7 +141,7 @@ export default function BasicButtons() {
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button onClick={handleSave} type="submit">Add</Button>
+            <Button type="submit">Add</Button>
           </DialogActions>
       </Dialog>
       </>
