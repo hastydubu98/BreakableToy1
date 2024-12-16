@@ -59,8 +59,8 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     public Product update(long id, Product product) {
         Product oldProduct = getProduct(id);
         product = product.withUpdateDate(id, oldProduct.getCreationDate(), LocalDate.now());
-        delete(oldProduct.getId());
-        products.add(product);
+        int index = products.indexOf(oldProduct);
+        products.set(index, product);
         return product;
     }
 
