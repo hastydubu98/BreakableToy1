@@ -76,9 +76,9 @@ export default function BasicButtons() {
               autoFocus
               required
               margin="dense"
-              id="name"
-              name="name"
-              label="Name"
+              id="category"
+              name="category"
+              label="Category"
               type="text"
               fullWidth
               variant="standard"
@@ -86,9 +86,9 @@ export default function BasicButtons() {
             <TextField
               required
               margin="dense"
-              id="category"
-              name="category"
-              label="Category"
+              id="name"
+              name="name"
+              label="Name"
               type="text"
               fullWidth
               variant="standard"
@@ -120,6 +120,7 @@ export default function BasicButtons() {
               type="date"
               fullWidth
               variant="standard"
+              helperText="Expiration Date"
             />
           </DialogContent>
           <DialogActions>
