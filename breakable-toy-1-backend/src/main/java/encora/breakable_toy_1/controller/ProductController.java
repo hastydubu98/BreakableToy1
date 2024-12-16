@@ -15,11 +15,13 @@ public class ProductController {
     @Autowired
     private ProductRepository productRepository;
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("")
     public List<Product> getAllProducts() {
         return productRepository.getAllProducts();
     }
 
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/getproduct")
     public Product getProduct(@RequestParam long id) {
         return productRepository.getProduct(id);

@@ -7,32 +7,44 @@ const columns = [
   { field: 'category', headerName: 'Category', width: 200, align: 'center', headerAlign: 'center', },
   { field: 'name', headerName: 'Name', width: 200, align: 'center', headerAlign: 'center', },
   { field: 'price', headerName: 'Price', width: 200, align: 'center', headerAlign: 'center', },
-  { field: 'date', headerName: 'Expiration Date', width: 200, align: 'center', headerAlign: 'center', },
+  { field: 'expirationDate', headerName: 'Expiration Date', width: 200, align: 'center', headerAlign: 'center', },
   { field: 'stock', headerName: 'Stock', width: 200, type: 'number', align: 'center', headerAlign: 'center', },
   { field: 'actions', headerName: 'Actions', width: 200, sortable: false, align: 'center', headerAlign: 'center', disableColumnMenu: true},
-];
-
-const rows = [
-  { id: 1, category: 'Food', name: 'Watermelon', price: '$ 1.50', date: '12/25/2024', stock: 50, actions: 'Edit/Delete'},
-  { id: 2, category: 'Electronics', name: 'Samsung TV', price: '$ 900.00', date: null, stock: 0, actions: 'Edit/Delete'},
-  { id: 3, category: 'Clothing', name: 'Jeans', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
-  { id: 4, category: 'Clothing', name: 'T-Shirt', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
-  { id: 5, category: 'Food', name: 'Watermelon', price: '$ 1.50', date: '12/25/2024', stock: 50, actions: 'Edit/Delete'},
-  { id: 6, category: 'Electronics', name: 'Samsung TV', price: '$ 900.00', date: null, stock: 0, actions: 'Edit/Delete'},
-  { id: 7, category: 'Clothing', name: 'Jeans', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
-  { id: 8, category: 'Clothing', name: 'T-Shirt', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
-  { id: 9, category: 'Clothing', name: 'Jeans', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
-  { id: 10, category: 'Clothing', name: 'T-Shirt', price: '$ 60.00', date: null, stock: 50, actions: 'Edit/Delete'},
 ];
 
 const paginationModel = { page: 0, pageSize: 10 };
 
 export default function DataTable() {
+
+    const [products, setProducts] = React.useState([]);
+    const [loading, setLoading] = React.useState(true);
+
+     const fetchProducts = async () => {
+            try {
+                const response = await fetch("http://localhost:8080/", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" },
+                });
+                if (!response.ok) {
+                    throw new Error("Failed to fetch products");
+                }
+                const data = await response.json();
+                setProducts(data); // Set the fetched data to the state
+            } catch (err) {
+                setError(err.message); // Handle errors
+            } finally {
+                setLoading(false); // Turn off loading state
+            }
+        };
+
+        fetchProducts();
+
+
   return (
       <Container maxWidth="xl" >
-        <Paper sx={{ height: 650, width: '100%' }}>
+        <Paper sx={{ height: 630, width: '100%' }}>
           <DataGrid
-            rows={rows}
+            rows={products}
             columns={columns}
             initialState={{ pagination: { paginationModel } }}
             pageSizeOptions={[10]}
