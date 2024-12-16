@@ -58,29 +58,28 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     @Override
     public Product update(long id, Product product) {
         Product oldProduct = getProduct(id);
-        product = product.withUpdateDate(id, oldProduct.getCreationDate(), LocalDate.now());
-        int index = products.indexOf(oldProduct);
-        products.set(index, product);
-        return product;
+        oldProduct.setCategory(product.getCategory());
+        oldProduct.setName(product.getName());
+        oldProduct.setPrice(product.getPrice());
+        oldProduct.setExpirationDate(product.getExpirationDate());
+        oldProduct.setUpdateDate(LocalDate.now());
+        oldProduct.setStock(product.getStock());
+        return oldProduct;
     }
 
     @Override
     public Product outOfStock(long id) {
-        Product oldProduct = getProduct(id);
-        Product product = oldProduct;
-        product = product.outOfStock(id);
-        int index = products.indexOf(oldProduct);
-        products.set(index, product);
+        Product product = getProduct(id);
+        product.setStock(0);
+        product.setUpdateDate(LocalDate.now());
         return product;
     }
 
     @Override
     public Product inStock(long id) {
-        Product oldProduct = getProduct(id);
-        Product product = oldProduct;
-        product = product.inStock(id);
-        int index = products.indexOf(oldProduct);
-        products.set(index, product);
+        Product product = getProduct(id);
+        product.setStock(10);
+        product.setUpdateDate(LocalDate.now());
         return product;
     }
 

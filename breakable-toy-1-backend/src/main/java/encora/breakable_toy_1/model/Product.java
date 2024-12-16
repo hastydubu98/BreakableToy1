@@ -88,7 +88,7 @@ public class Product {
     public void setStock(long stock) {
         this.stock = stock;
     }
-    
+
     // Builder class
     public static class Builder {
         private long id;
