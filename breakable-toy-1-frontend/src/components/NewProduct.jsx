@@ -65,7 +65,7 @@ export default function BasicButtons() {
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries(formData.entries());
               console.log("Clicked");
-                  fetch("http://localhost:8080/products", {
+                  fetch("http://localhost:9090/products", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify(formJson)

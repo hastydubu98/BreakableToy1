@@ -24,7 +24,7 @@ export default function DataTable() {
      React.useEffect(() => {
          const fetchProducts = async () => {
            try {
-             const response = await fetch("http://localhost:8080/", {
+             const response = await fetch("http://localhost:9090/", {
                method: "GET",
                headers: { "Content-Type": "application/json" },
              });

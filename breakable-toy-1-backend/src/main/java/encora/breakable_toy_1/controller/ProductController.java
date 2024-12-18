@@ -16,19 +16,19 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("")
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @GetMapping("/getproduct")
     public Product getProduct(@RequestParam long id) {
         return productService.getProduct(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
         return productService.createProduct(
@@ -39,25 +39,25 @@ public class ProductController {
                 product.getStock());
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @DeleteMapping("/delete")
     public boolean deleteProduct(@RequestParam long id) {
         return productService.deleteProduct(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
         return productService.updateProduct(id, product);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PostMapping("/products/{id}/outofstock")
     public Product outOfStockProduct(@PathVariable long id) {
         return productService.outOfStock(id);
     }
 
-    @CrossOrigin(origins = "http://localhost:5173")
+    @CrossOrigin(origins = "http://localhost:8080")
     @PutMapping("/products/{id}/instock")
     public Product inStockProduct(@PathVariable long id) {
         return productService.inStock(id);
