@@ -2,6 +2,7 @@ package encora.breakable_toy_1.controller;
 
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.repository.ProductRepository;
+import encora.breakable_toy_1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,24 +14,24 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ProductController {
 
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("")
     public List<Product> getAllProducts() {
-        return productRepository.getAllProducts();
+        return productService.getAllProducts();
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/getproduct")
     public Product getProduct(@RequestParam long id) {
-        return productRepository.getProduct(id);
+        return productService.getProduct(id);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
-        return productRepository.create(
+        return productService.createProduct(
                 product.getCategory(),
                 product.getName(),
                 product.getPrice(),
@@ -41,24 +42,24 @@ public class ProductController {
     @CrossOrigin(origins = "http://localhost:5173")
     @DeleteMapping("/delete")
     public boolean deleteProduct(@RequestParam long id) {
-        return productRepository.delete(id);
+        return productService.deleteProduct(id);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
-        return productRepository.update(id, product);
+        return productService.updateProduct(id, product);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PostMapping("/products/{id}/outofstock")
     public Product outOfStockProduct(@PathVariable long id) {
-        return productRepository.outOfStock(id);
+        return productService.outOfStock(id);
     }
 
     @CrossOrigin(origins = "http://localhost:5173")
     @PutMapping("/products/{id}/instock")
     public Product inStockProduct(@PathVariable long id) {
-        return productRepository.inStock(id);
+        return productService.inStock(id);
     }
 }
