@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.logging.Logger;
 
 @Repository
 public class ProductRepositoryInMemoryImpl implements ProductRepository{
@@ -53,11 +54,11 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
             double totalStock =  total.get(category).get("totalStock");
             double oldTotalValue = total.get(category).get("totalValue");
-            double oldAverage  = total.get(category).get("average");
+            double newAverage  = (oldTotalValue + totalValue) / (totalStock + stock);
 
             total.get(category).put("totalStock", totalStock + stock);
             total.get(category).put("totalValue", oldTotalValue + totalValue);
-            total.get(category).put("average", oldAverage + average);
+            total.get(category).put("average", newAverage);
 
         } else {
 
@@ -75,24 +76,66 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
     @Override
     public boolean delete(long id) {
+
+        Product calProduct = getProduct(id);
+
+        double productValue = calProduct.getStock() * calProduct.getPrice();
+
+        total.get(calProduct.getCategory()).compute("totalStock", (k, oldStock) -> oldStock - calProduct.getStock());
+        total.get(calProduct.getCategory()).compute("totalValue", (k, oldValue) -> oldValue - productValue);
+
+        double totalStock =  total.get(calProduct.getCategory()).get("totalStock");
+        double totalValue = total.get(calProduct.getCategory()).get("totalValue");
+
+        total.get(calProduct.getCategory()).put("average", totalValue / totalStock);
+
         return products.removeIf(product -> product.getId() == id);
     }
 
     @Override
     public Product update(long id, Product product) {
         Product oldProduct = getProduct(id);
+
+        double newStock = product.getStock() - oldProduct.getStock();
+        double newValue = (product.getStock() * product.getPrice()) - (oldProduct.getStock() * oldProduct.getPrice());
+
+        double newTotalStocks = total.get(product.getCategory()).get("totalStock")
+                + (newStock);
+
+        double newTotalValue = total.get(product.getCategory()).get("totalValue")
+                + (newValue);
+
+        double newAverage = newTotalValue / newTotalStocks;
+
+        total.get(product.getCategory()).put("totalStock", newTotalStocks);
+        total.get(product.getCategory()).put("totalValue", newTotalValue);
+        total.get(product.getCategory()).put("average", newAverage);
+
+
         oldProduct.setCategory(product.getCategory());
         oldProduct.setName(product.getName());
         oldProduct.setPrice(product.getPrice());
         oldProduct.setExpirationDate(product.getExpirationDate());
         oldProduct.setUpdateDate(LocalDate.now());
         oldProduct.setStock(product.getStock());
+
         return oldProduct;
     }
 
     @Override
     public Product outOfStock(long id) {
         Product product = getProduct(id);
+
+        double oldStock = total.get(product.getCategory()).get("totalStock");
+        double newStock = oldStock - product.getStock();
+        total.get(product.getCategory()).put("totalStock", newStock);
+
+        double oldValue = total.get(product.getCategory()).get("totalValue");
+        double productValue = product.getStock() * product.getPrice();
+        total.get(product.getCategory()).put("totalValue", oldValue - productValue);
+
+        total.get(product.getCategory()).put("average", (oldValue - productValue) / newStock);
+
         product.setStock(0);
         product.setUpdateDate(LocalDate.now());
         return product;
@@ -101,6 +144,18 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     @Override
     public Product inStock(long id) {
         Product product = getProduct(id);
+
+        total.get(product.getCategory()).compute("totalStock", (k, oldStock) -> oldStock + 10);
+
+        double oldValue = total.get(product.getCategory()).get("totalValue");
+        double productValue = 10 * product.getPrice();
+        total.get(product.getCategory()).put("totalValue", oldValue + productValue);
+
+        double totalStock = total.get(product.getCategory()).get("totalStock");
+        double totalValue = total.get(product.getCategory()).get("totalValue");
+
+        total.get(product.getCategory()).put("average", totalValue / totalStock);
+
         product.setStock(10);
         product.setUpdateDate(LocalDate.now());
         return product;
