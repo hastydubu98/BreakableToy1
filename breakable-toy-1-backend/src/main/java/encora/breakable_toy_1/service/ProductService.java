@@ -4,6 +4,7 @@ import encora.breakable_toy_1.model.Product;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface ProductService {
 
@@ -21,4 +22,5 @@ public interface ProductService {
 
     Product inStock(long id);
 
+    Map<String, Map<String, Double>> total();
 }

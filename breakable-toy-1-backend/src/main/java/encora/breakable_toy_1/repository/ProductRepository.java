@@ -1,10 +1,10 @@
 package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public interface ProductRepository {
 
@@ -23,5 +23,7 @@ public interface ProductRepository {
      Product inStock(long id);
 
      void dummyData();
+
+     Map<String, Map<String, Double>> total();
 
 }

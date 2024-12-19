@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -47,5 +48,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product inStock(long id) {
         return productRepository.inStock(id);
+    }
+
+    @Override
+    public Map<String, Map<String, Double>> total() {
+        return productRepository.total();
     }
 }

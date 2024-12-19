@@ -1,14 +1,10 @@
 package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
-import org.slf4j.spi.LocationAwareLogger;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
@@ -16,11 +12,14 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
     private final ArrayList<Product> products;
     private final AtomicLong counter = new AtomicLong();
+    private final Map<String, Map<String, Double>> total = new HashMap<>();
 
     public ProductRepositoryInMemoryImpl() {
         this.products = new ArrayList<>();
         dummyData();
     }
+
+
 
     @Override
     public Product getProduct(long id) {
@@ -46,6 +45,30 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
                 creationDate, null, stock);
 
         products.add(product);
+
+        double totalValue = stock * price;
+        double average = totalValue / stock;
+
+        if (total.containsKey(category)) {
+
+            double totalStock =  total.get(category).get("totalStock");
+            double oldTotalValue = total.get(category).get("totalValue");
+            double oldAverage  = total.get(category).get("average");
+
+            total.get(category).put("totalStock", totalStock + stock);
+            total.get(category).put("totalValue", oldTotalValue + totalValue);
+            total.get(category).put("average", oldAverage + average);
+
+        } else {
+
+            Map<String, Double> innerDictionary = new HashMap<>();
+
+            innerDictionary.put("totalStock", (double) stock);
+            innerDictionary.put("totalValue", totalValue);
+            innerDictionary.put("average", average);
+
+            total.put(category, innerDictionary);
+        }
 
         return product;
     }
@@ -203,6 +226,11 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
             create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), EXPIRATION_DATES.get(i), PRODUCT_STOCKS.get(i));
         }
 
+    }
+
+    @Override
+    public Map<String, Map<String, Double>> total() {
+        return total;
     }
 
 }
