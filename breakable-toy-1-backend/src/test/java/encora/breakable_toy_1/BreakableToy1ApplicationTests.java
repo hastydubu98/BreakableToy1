@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDate;
+import java.util.Map;
 
 @SpringBootTest
 class BreakableToy1ApplicationTests {
@@ -22,6 +23,25 @@ class BreakableToy1ApplicationTests {
 
 		// Then
 		assertEquals(0L, result.getStock());
+	}
+
+	@Test
+	public void total()  {
+		// Given
+		ProductRepositoryInMemoryImpl repo = new ProductRepositoryInMemoryImpl();
+		repo.create("category", "name", 500.00, LocalDate.now(), 15);
+		repo.create("category", "name", 500.00, LocalDate.now(), 15);
+		repo.create("category", "name", 500.00, LocalDate.now(), 15);
+		repo.create("category", "name", 500.00, LocalDate.now(), 15);
+		repo.create("category", "name", 500.00, LocalDate.now(), 15);
+
+		// When
+		Map<String,Map<String,Double>> result = repo.total();
+
+		//Then
+		assertEquals(37500,result.get("category").get("totalValue"));
+		assertEquals(75,result.get("category").get("totalStock"));
+		assertEquals(500,result.get("category").get("average"));
 	}
 
 }
