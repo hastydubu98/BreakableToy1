@@ -1,6 +1,7 @@
 package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
+import encora.breakable_toy_1.model.Statistics;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -207,33 +208,30 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
     }
 
     @Override
-    public Map<String, Map<String, Double>> total() {
+    public Map<String, Statistics> total() {
 
-        final Map<String, Map<String, Double>> total = new HashMap<>();
+        final Map<String, Statistics> total = new HashMap<>();
 
         for(Product product : products)  {
+
             double totalValue = product.getStock() * product.getPrice();
             double average = totalValue / product.getStock();
 
             if (total.containsKey(product.getCategory())) {
 
-                double totalStock =  total.get(product.getCategory()).get("totalStock");
-                double oldTotalValue = total.get(product.getCategory()).get("totalValue");
+                double totalStock =  total.get(product.getCategory()).getTotalStocks();
+                double oldTotalValue = total.get(product.getCategory()).getTotalValue();
                 double newAverage  = (oldTotalValue + totalValue) / (totalStock + product.getStock());
 
-                total.get(product.getCategory()).put("totalStock", totalStock + product.getStock());
-                total.get(product.getCategory()).put("totalValue", oldTotalValue + totalValue);
-                total.get(product.getCategory()).put("average", newAverage);
+                total.get(product.getCategory()).setTotalStocks(totalStock + product.getStock());
+                total.get(product.getCategory()).setTotalValue(oldTotalValue + totalValue);
+                total.get(product.getCategory()).setAverage(newAverage);
 
             } else {
 
-                Map<String, Double> innerDictionary = new HashMap<>();
+                final Statistics statistics = new Statistics((double) product.getStock(),totalValue, average);
 
-                innerDictionary.put("totalStock", (double) product.getStock());
-                innerDictionary.put("totalValue", totalValue);
-                innerDictionary.put("average", average);
-
-                total.put(product.getCategory(), innerDictionary);
+                total.put(product.getCategory(), statistics);
             }
         }
 

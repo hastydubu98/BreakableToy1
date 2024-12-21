@@ -2,13 +2,13 @@ package encora.breakable_toy_1.model;
 
 public class Statistics {
 
-    private double totalValue;
     private double totalStocks;
+    private double totalValue;
     private double average;
 
-    public Statistics(double totalValue, double totalStocks, double average) {
-        this.totalValue = totalValue;
+    public Statistics(double totalStocks, double totalValue, double average) {
         this.totalStocks = totalStocks;
+        this.totalValue = totalValue;
         this.average = average;
     }
 

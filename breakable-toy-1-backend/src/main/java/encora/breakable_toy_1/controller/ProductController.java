@@ -1,6 +1,7 @@
 package encora.breakable_toy_1.controller;
 
 import encora.breakable_toy_1.model.Product;
+import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.repository.ProductRepository;
 import encora.breakable_toy_1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ProductController {
     }
 
     @GetMapping("/total")
-    public Map<String, Map<String, Double>> getTotal() {
+    public Map<String, Statistics> getTotal() {
         return productService.total();
     }
 }

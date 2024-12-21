@@ -1,6 +1,7 @@
 package encora.breakable_toy_1.service;
 
 import encora.breakable_toy_1.model.Product;
+import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Map<String, Map<String, Double>> total() {
+    public Map<String, Statistics> total() {
         return productRepository.total();
     }
 }

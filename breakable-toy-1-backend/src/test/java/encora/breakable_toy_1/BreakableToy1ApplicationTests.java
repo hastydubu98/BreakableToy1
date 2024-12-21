@@ -1,6 +1,7 @@
 package encora.breakable_toy_1;
 
 import encora.breakable_toy_1.model.Product;
+import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.repository.ProductRepositoryInMemoryImpl;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,12 +37,12 @@ class BreakableToy1ApplicationTests {
 		repo.create("category", "name", 500.00, LocalDate.now(), 15);
 
 		// When
-		Map<String,Map<String,Double>> result = repo.total();
+		Map<String, Statistics> result = repo.total();
 
 		//Then
-		assertEquals(37500,result.get("category").get("totalValue"));
-		assertEquals(75,result.get("category").get("totalStock"));
-		assertEquals(500,result.get("category").get("average"));
+		assertEquals(37500,result.get("category").getTotalValue());
+		assertEquals(75,result.get("category").getTotalStocks());
+		assertEquals(500,result.get("category").getAverage());
 	}
 
 }
