@@ -19,12 +19,6 @@ public interface ProductRepository {
 
      Product update(long id, Product product);
 
-     Product outOfStock(long id);
-
-     Product inStock(long id);
-
      void dummyData();
-
-     Map<String, Statistics> total();
 
 }

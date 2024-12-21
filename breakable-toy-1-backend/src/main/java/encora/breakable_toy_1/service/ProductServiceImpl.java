@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    public void setProductRepository(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
 
     @Override
     public Product getProduct(long id) {
@@ -43,16 +48,52 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product outOfStock(long id) {
-        return productRepository.outOfStock(id);
+        Product product = getProduct(id);
+
+        product.setStock(0);
+        product.setUpdateDate(LocalDate.now());
+        return product;
     }
 
     @Override
     public Product inStock(long id) {
-        return productRepository.inStock(id);
+        Product product = getProduct(id);
+
+        product.setStock(10);
+        product.setUpdateDate(LocalDate.now());
+        return product;
     }
 
     @Override
     public Map<String, Statistics> total() {
-        return productRepository.total();
+
+        final List<Product> products = getAllProducts();
+
+        final Map<String, Statistics> total = new HashMap<>();
+
+        for(Product product : products)  {
+
+            double totalValue = product.getStock() * product.getPrice();
+            double average = totalValue / product.getStock();
+
+            if (total.containsKey(product.getCategory())) {
+
+                double totalStock =  total.get(product.getCategory()).getTotalStocks();
+                double oldTotalValue = total.get(product.getCategory()).getTotalValue();
+                double newAverage  = (oldTotalValue + totalValue) / (totalStock + product.getStock());
+
+                total.get(product.getCategory()).setTotalStocks(totalStock + product.getStock());
+                total.get(product.getCategory()).setTotalValue(oldTotalValue + totalValue);
+                total.get(product.getCategory()).setAverage(newAverage);
+
+            } else {
+
+                final Statistics statistics = new Statistics((double) product.getStock(),totalValue, average);
+
+                total.put(product.getCategory(), statistics);
+            }
+        }
+
+        return total;
     }
 }

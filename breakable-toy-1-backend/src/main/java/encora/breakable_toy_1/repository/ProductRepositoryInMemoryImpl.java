@@ -67,24 +67,6 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
         return oldProduct;
     }
 
-    @Override
-    public Product outOfStock(long id) {
-        Product product = getProduct(id);
-
-        product.setStock(0);
-        product.setUpdateDate(LocalDate.now());
-        return product;
-    }
-
-    @Override
-    public Product inStock(long id) {
-        Product product = getProduct(id);
-
-        product.setStock(10);
-        product.setUpdateDate(LocalDate.now());
-        return product;
-    }
-
     public void dummyData () {
         List<String> CATEGORIES = Arrays.asList(
                 "Mobile Accessories",
@@ -205,37 +187,6 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
             create(CATEGORIES.get(i), PRODUCTS.get(i), PRICES.get(i), EXPIRATION_DATES.get(i), PRODUCT_STOCKS.get(i));
         }
 
-    }
-
-    @Override
-    public Map<String, Statistics> total() {
-
-        final Map<String, Statistics> total = new HashMap<>();
-
-        for(Product product : products)  {
-
-            double totalValue = product.getStock() * product.getPrice();
-            double average = totalValue / product.getStock();
-
-            if (total.containsKey(product.getCategory())) {
-
-                double totalStock =  total.get(product.getCategory()).getTotalStocks();
-                double oldTotalValue = total.get(product.getCategory()).getTotalValue();
-                double newAverage  = (oldTotalValue + totalValue) / (totalStock + product.getStock());
-
-                total.get(product.getCategory()).setTotalStocks(totalStock + product.getStock());
-                total.get(product.getCategory()).setTotalValue(oldTotalValue + totalValue);
-                total.get(product.getCategory()).setAverage(newAverage);
-
-            } else {
-
-                final Statistics statistics = new Statistics((double) product.getStock(),totalValue, average);
-
-                total.put(product.getCategory(), statistics);
-            }
-        }
-
-        return total;
     }
 
 }

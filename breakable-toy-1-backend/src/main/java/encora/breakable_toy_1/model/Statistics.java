@@ -33,6 +33,6 @@ public class Statistics {
     }
 
     public void setAverage(double average) {
-        this.average = average;
+        this.average = Math.round(average * 100.0) / 100.0;
     }
 }

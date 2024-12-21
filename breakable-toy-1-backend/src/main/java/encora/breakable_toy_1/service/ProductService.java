@@ -24,4 +24,6 @@ public interface ProductService {
     Product inStock(long id);
 
     Map<String, Statistics> total();
+
+
 }
