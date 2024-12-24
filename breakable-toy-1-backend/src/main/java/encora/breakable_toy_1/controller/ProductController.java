@@ -2,27 +2,33 @@ package encora.breakable_toy_1.controller;
 
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.model.Statistics;
-import encora.breakable_toy_1.repository.ProductRepository;
 import encora.breakable_toy_1.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
 public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
+
+    public ProductController(ProductService productService, PagedResourcesAssembler<Product> pagedResourcesAssembler) {
+        this.productService = productService;
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
+    }
 
     @GetMapping("/products")
     public List<Product> getAllProducts() {
@@ -70,11 +76,18 @@ public class ProductController {
     }
 
     @GetMapping("/pagination")
-    public List<Product> pagination(@RequestParam int page) {
-        int start = page * 10;
-        int end = Math.min(start + 10, productService.getAllProducts().size());
+    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page) {
 
-        return productService.getAllProducts().subList(start, end);
+        Pageable pageable = PageRequest.of(page, 10); // Page size = 10
+        List<Product> products = productService.getAllProducts();
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), products.size());
+        List<Product> subList = products.subList(start, end);
+
+        Page<Product> pageProducts = new PageImpl<>(subList, pageable, products.size());
+
+        return pagedResourcesAssembler.toModel(pageProducts);
     }
 
 
