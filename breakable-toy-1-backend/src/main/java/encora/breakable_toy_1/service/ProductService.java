@@ -2,6 +2,10 @@ package encora.breakable_toy_1.service;
 
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.model.Statistics;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -24,6 +28,4 @@ public interface ProductService {
     Product inStock(long id);
 
     Map<String, Statistics> total();
-
-
 }

@@ -1,7 +1,9 @@
 package encora.breakable_toy_1.repository;
 
 import encora.breakable_toy_1.model.Product;
-import encora.breakable_toy_1.model.Statistics;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
