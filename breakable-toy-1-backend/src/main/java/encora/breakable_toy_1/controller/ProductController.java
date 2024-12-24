@@ -13,6 +13,7 @@ import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,9 +23,6 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     @GetMapping("/products")
     public List<Product> getAllProducts() {
@@ -69,5 +67,24 @@ public class ProductController {
     @GetMapping("/total")
     public Map<String, Statistics> getTotal() {
         return productService.total();
+    }
+
+    @GetMapping("/pagination")
+    public List<Product> pagination(@RequestParam int page) {
+        int start = page * 10;
+        int end = Math.min(start + 10, productService.getAllProducts().size());
+
+        return productService.getAllProducts().subList(start, end);
+    }
+
+
+    @GetMapping("/sorting")
+    public List<Product> sorting(@RequestParam String sortBy) {
+
+        List<Product> products = productService.getAllProducts();
+
+        products.sort(Comparator.comparing(Product::getName));
+
+        return products;
     }
 }
