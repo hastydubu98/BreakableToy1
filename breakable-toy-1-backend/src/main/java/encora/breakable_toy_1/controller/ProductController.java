@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 
 @RestController
 public class ProductController {
@@ -84,26 +85,30 @@ public class ProductController {
         Pageable pageable = PageRequest.of(page, 10); // Page size = 10
         List<Product> products = productService.getAllProducts();
 
+        Comparator<Product> comparator;
+
         switch (sortBy) {
             case "category":
-                products.sort(Comparator.comparing(Product::getCategory));
+                comparator = Comparator.comparing(Product::getCategory);
                 break;
             case "name":
-                products.sort(Comparator.comparing(Product::getName));
+                comparator = Comparator.comparing(Product::getName);
                 break;
             case "price":
-                products.sort(Comparator.comparing(Product::getPrice));
+                comparator = Comparator.comparing(Product::getPrice);
                 break;
             case "expirationDate":
-                products.sort(Comparator.comparing(Product::getExpirationDate));
+                comparator = Comparator.comparing(Product::getExpirationDate);
                 break;
             case "stock":
-                products.sort(Comparator.comparing(Product::getStock));
+                comparator = Comparator.comparing(Product::getStock);
                 break;
             default:
-                products.sort(Comparator.comparing(Product::getId));
+                comparator = Comparator.comparing(Product::getId);
                 break;
         }
+
+        products.sort(comparator);
 
         if ("desc".equalsIgnoreCase(direction)) {
             products = products.reversed();
