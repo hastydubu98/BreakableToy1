@@ -77,12 +77,12 @@ public class ProductController {
     }
 
     @GetMapping("/pagination")
-    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page, @RequestParam String category, @RequestBody String direction) {
+    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page, @RequestParam String sortBy, @RequestParam String direction) {
 
         Pageable pageable = PageRequest.of(page, 10); // Page size = 10
         List<Product> products = productService.getAllProducts();
 
-        switch (category) {
+        switch (sortBy) {
             case "category":
                 products.sort(Comparator.comparing(Product::getCategory));
                 break;
@@ -100,8 +100,8 @@ public class ProductController {
                 break;
         }
 
-        if (Objects.equals(direction, "asc")) {
-            products.reversed();
+        if ("desc".equalsIgnoreCase(direction)) {
+            products = products.reversed();
         }
 
         int start = (int) pageable.getOffset();
