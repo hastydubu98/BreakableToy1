@@ -77,7 +77,9 @@ public class ProductController {
     }
 
     @GetMapping("/pagination")
-    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page, @RequestParam String sortBy, @RequestParam String direction) {
+    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page,
+                                                       @RequestParam( required = false ) String sortBy,
+                                                       @RequestParam( required = false ) String direction) {
 
         Pageable pageable = PageRequest.of(page, 10); // Page size = 10
         List<Product> products = productService.getAllProducts();
@@ -97,6 +99,9 @@ public class ProductController {
                 break;
             case "stock":
                 products.sort(Comparator.comparing(Product::getStock));
+                break;
+            default:
+                products.sort(Comparator.comparing(Product::getId));
                 break;
         }
 
