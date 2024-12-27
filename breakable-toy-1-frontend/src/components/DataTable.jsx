@@ -24,18 +24,26 @@ export default function DataTable() {
         page: 0,
         pageSize: 10,
       });
+    const [queryOptions, setQueryOptions] = React.useState([{}]);
+
+    if (queryOptions.length == 0) {
+        setQueryOptions([{
+            field: null,
+            direction: null,
+        }]);
+    }
 
      React.useEffect(() => {
          const fetchProducts = async () => {
-             console.log(paginationModel)
            setLoading(true);
+           console.log(queryOptions)
            try {
-             const response = await fetch(`http://localhost:9090/pagination?page=${paginationModel.page}`, {
+             const response = await
+             fetch(`http://localhost:9090/pagination?page=${paginationModel.page}&sortBy=${queryOptions[0]["field"]}&direction=${queryOptions[0]["sort"]}`, {
                method: "GET",
                headers: { "Content-Type": "application/json" },
              });
              const data = await response.json();
-             console.log(data)
              setRowCount(data["page"]["totalElements"]);
              setProducts(data["_embedded"]["products"]);
            } catch (error) {
@@ -45,7 +53,7 @@ export default function DataTable() {
            }
          };
          fetchProducts();
-       }, [paginationModel]);
+       }, [paginationModel, queryOptions]);
 
   return (
       <Container maxWidth="xl" >
@@ -55,13 +63,15 @@ export default function DataTable() {
             columns={columns}
             rowCount={rowCount}
             paginationMode="server"
-            pagination
             paginationModel = {paginationModel}
             pageSizeOptions = {[10]}
+            onPaginationModelChange={(newModel) => {setPaginationModel(newModel);}}
+            sortingMode="server"
+            onSortModelChange={(newModel) => {setQueryOptions(newModel)}}
             checkboxSelection
             loading={loading}
             //onRowSelectionModelChange={handleRowSelectionChange}
-            onPaginationModelChange={(newModel) => {setPaginationModel(newModel);}}
+
             sx={{ border: "2px black solid", }}
           />
         </Paper>
