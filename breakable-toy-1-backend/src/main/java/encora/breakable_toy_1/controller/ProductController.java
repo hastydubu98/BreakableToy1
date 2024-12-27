@@ -82,7 +82,7 @@ public class ProductController {
                                                        @RequestParam( required = false ) String sortBy,
                                                        @RequestParam( required = false ) String direction) {
 
-        Pageable pageable = PageRequest.of(page, 10); // Page size = 10
+        Pageable pageable = PageRequest.of(page, 10);
         List<Product> products = productService.getAllProducts();
 
         Comparator<Product> comparator;
@@ -98,7 +98,7 @@ public class ProductController {
                 comparator = Comparator.comparing(Product::getPrice);
                 break;
             case "expirationDate":
-                comparator = Comparator.comparing(Product::getExpirationDate);
+                comparator = Comparator.comparing(Product::getExpirationDate, Comparator.nullsFirst(Comparator.naturalOrder()));
                 break;
             case "stock":
                 comparator = Comparator.comparing(Product::getStock);
