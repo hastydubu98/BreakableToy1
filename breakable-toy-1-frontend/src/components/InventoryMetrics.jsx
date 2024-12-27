@@ -12,14 +12,35 @@ function createData(name, products, value, price) {
   return { name, products, value, price};
 }
 
-const rows = [
-  createData('Food', 50, "$ 75", "$ 1.50"),
-  createData('Clothing', 100, "$ 4,500", "$ 45.00"),
-  createData('Electronics', 0, "$ 0", "$ 0"),
-  createData('Overall', 150, "$ 4,575.00", "$ 30.50"),
-];
 
 export default function BasicTable() {
+
+    const [total, setTotal] = React.useState([]);
+    const [error, setError] = React.useState(null);
+    const [loading, setLoading] = React.useState(true);
+
+    React.useEffect(() => {
+             const fetchProducts = async () => {
+               setLoading(true);
+               try {
+                 const response = await
+                 fetch(`http://localhost:9090/total`, {
+                   method: "GET",
+                   headers: { "Content-Type": "application/json" },
+                 });
+                 const data = await response.json();
+                 setTotal(data)
+               } catch (error) {
+                 console.error("Error fetching products:", error);
+               } finally {
+                setLoading(false);
+               }
+             };
+             fetchProducts();
+           }, []);
+
+  console.log(total)
+
   return (
       <Container maxWidth="xl" className="margin">
         <TableContainer component={Paper}>
@@ -33,17 +54,17 @@ export default function BasicTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {Object.keys(total).map((category) => (
                 <TableRow
-                  key={row.name}
+                  key={category}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="row">
-                    {row.name}
+                    {category}
                   </TableCell>
-                  <TableCell align="right">{row.products}</TableCell>
-                  <TableCell align="right">{row.value}</TableCell>
-                  <TableCell align="right">{row.price}</TableCell>
+                  <TableCell align="right">{total[category]["totalStocks"]}</TableCell>
+                  <TableCell align="right">{total[category]["totalValue"]}</TableCell>
+                  <TableCell align="right">{total[category]["average"]}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

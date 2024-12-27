@@ -36,7 +36,6 @@ export default function DataTable() {
      React.useEffect(() => {
          const fetchProducts = async () => {
            setLoading(true);
-           console.log(queryOptions)
            try {
              const response = await
              fetch(`http://localhost:9090/pagination?page=${paginationModel.page}&sortBy=${queryOptions[0]["field"]}&direction=${queryOptions[0]["sort"]}`, {
@@ -71,7 +70,6 @@ export default function DataTable() {
             checkboxSelection
             loading={loading}
             //onRowSelectionModelChange={handleRowSelectionChange}
-
             sx={{ border: "2px black solid", }}
           />
         </Paper>
