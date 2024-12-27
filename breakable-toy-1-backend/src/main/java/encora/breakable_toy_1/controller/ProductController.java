@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 @RestController
 public class ProductController {
@@ -76,10 +77,32 @@ public class ProductController {
     }
 
     @GetMapping("/pagination")
-    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page) {
+    public PagedModel<EntityModel<Product>> pagination(@RequestParam int page, @RequestParam String category, @RequestBody String direction) {
 
         Pageable pageable = PageRequest.of(page, 10); // Page size = 10
         List<Product> products = productService.getAllProducts();
+
+        switch (category) {
+            case "category":
+                products.sort(Comparator.comparing(Product::getCategory));
+                break;
+            case "name":
+                products.sort(Comparator.comparing(Product::getName));
+                break;
+            case "price":
+                products.sort(Comparator.comparing(Product::getPrice));
+                break;
+            case "expirationDate":
+                products.sort(Comparator.comparing(Product::getExpirationDate));
+                break;
+            case "stock":
+                products.sort(Comparator.comparing(Product::getStock));
+                break;
+        }
+
+        if (Objects.equals(direction, "asc")) {
+            products.reversed();
+        }
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), products.size());
