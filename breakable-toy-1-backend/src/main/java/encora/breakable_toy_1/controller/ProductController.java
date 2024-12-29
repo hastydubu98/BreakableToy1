@@ -16,14 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 @RestController
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private final ProductService productService;
 
     private final PagedResourcesAssembler<Product> pagedResourcesAssembler;
 
@@ -114,8 +113,6 @@ public class ProductController {
 
         products.sort(comparator);
 
-
-
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), products.size());
         List<Product> subList = products.subList(start, end);
@@ -125,14 +122,40 @@ public class ProductController {
         return pagedResourcesAssembler.toModel(pageProducts);
     }
 
+    @PostMapping("/filter")
+    public List<Product> filter(@RequestParam (required = false) String name,
+                                @RequestParam (required = false) List<String> categories,
+                                @RequestParam (required = false) String availability) {
 
-    @GetMapping("/sorting")
-    public List<Product> sorting(@RequestParam String sortBy) {
+        List<Product> products = getAllProducts();
 
-        List<Product> products = productService.getAllProducts();
+        Predicate<Product> combinedPredicate = product -> true;
 
-        products.sort(Comparator.comparing(Product::getName));
+        if (name != null && !name.isEmpty()) {
+           Predicate<Product> filter = product -> product.getName().equalsIgnoreCase(name);
+            combinedPredicate = combinedPredicate.and(filter);
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            Predicate<Product> filter = product -> categories.contains(product.getCategory());
+            combinedPredicate = combinedPredicate.and(filter);
+        }
+
+        if (availability != null) {
+            if (availability.equalsIgnoreCase("In stock")) {
+                Predicate<Product> filter = product -> product.getStock() != 0;
+                combinedPredicate = combinedPredicate.and(filter);
+            } else if (availability.equalsIgnoreCase("Out of stock")) {
+                Predicate<Product> filter = product -> product.getStock() == 0;
+                combinedPredicate = combinedPredicate.and(filter);
+            }
+        }
+
+        products = products.stream().filter(combinedPredicate).toList();
 
         return products;
+
     }
+
+
 }
