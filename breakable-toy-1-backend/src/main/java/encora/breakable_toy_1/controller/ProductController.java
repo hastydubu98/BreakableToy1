@@ -108,11 +108,13 @@ public class ProductController {
                 break;
         }
 
+        if ("desc".equalsIgnoreCase(direction)) {
+            comparator = comparator.reversed();
+        }
+
         products.sort(comparator);
 
-        if ("desc".equalsIgnoreCase(direction)) {
-            products = products.reversed();
-        }
+
 
         int start = (int) pageable.getOffset();
         int end = Math.min((start + pageable.getPageSize()), products.size());
