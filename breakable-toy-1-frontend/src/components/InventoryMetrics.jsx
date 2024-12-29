@@ -39,8 +39,6 @@ export default function BasicTable() {
              fetchProducts();
            }, []);
 
-  console.log(total)
-
   return (
       <Container maxWidth="xl" className="margin">
         <TableContainer component={Paper}>

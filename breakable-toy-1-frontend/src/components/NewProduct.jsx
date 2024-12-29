@@ -30,24 +30,24 @@ export default function BasicButtons() {
                 expirationDate: {expirationDate},
                 stock: {stock}
             };
-            console.log("Clicked");
+
             fetch("http://localhost:8080/products", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(product)
             })
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Network response was not ok");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log("Product saved:", data);
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                });
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log("Product saved:", data);
+            })
+            .catch((error) => {
+                console.error("Error:", error);
+            });
         }
 
   return (
