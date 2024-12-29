@@ -54,7 +54,7 @@ export default function BasicTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {Object.keys(total).map((category) => (
+              {Object.keys(total).filter((category) => category !== "Total").map((category) => (
                 <TableRow
                   key={category}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -67,6 +67,19 @@ export default function BasicTable() {
                   <TableCell align="right">{total[category]["average"]}</TableCell>
                 </TableRow>
               ))}
+              {total && total["Total"] && (
+              <TableRow
+                key={"Total"}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                    {"Total"}
+                </TableCell>
+                <TableCell align="right">{total["Total"]["totalStocks"]}</TableCell>
+                <TableCell align="right">{total["Total"]["totalValue"]}</TableCell>
+                <TableCell align="right">{total["Total"]["average"]}</TableCell>
+              </TableRow>
+              )}
             </TableBody>
           </Table>
         </TableContainer>
