@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
 
-export default function BasicButtons() {
+export default function BasicButtons({ onProductAdded }) {
 
     const [open, setOpen] = React.useState(false);
 
@@ -20,35 +20,6 @@ export default function BasicButtons() {
       const handleClose = () => {
         setOpen(false);
       };
-
-    const handleSave = (e) => {
-        e.preventDefault();
-            const product = {
-                category: {category},
-                name: {name},
-                price: {price},
-                expirationDate: {expirationDate},
-                stock: {stock}
-            };
-
-            fetch("http://localhost:8080/products", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(product)
-            })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
-                return response.json();
-            })
-            .then((data) => {
-                console.log("Product saved:", data);
-            })
-            .catch((error) => {
-                console.error("Error:", error);
-            });
-        }
 
   return (
       <>
@@ -64,7 +35,6 @@ export default function BasicButtons() {
               event.preventDefault();
               const formData = new FormData(event.currentTarget);
               const formJson = Object.fromEntries(formData.entries());
-              console.log("Clicked");
                   fetch("http://localhost:9090/products", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
@@ -78,6 +48,7 @@ export default function BasicButtons() {
                       })
                       .then((data) => {
                           console.log("Product saved:", data);
+                          onProductAdded();
                       })
                       .catch((error) => {
                           console.error("Error:", error);

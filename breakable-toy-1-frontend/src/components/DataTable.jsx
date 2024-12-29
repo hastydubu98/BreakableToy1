@@ -12,7 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-export default function DataTable() {
+export default function DataTable({ refreshSignal }) {
 
     const [products, setProducts] = React.useState([]);
     const [error, setError] = React.useState(null);
@@ -175,7 +175,7 @@ export default function DataTable() {
            }
          };
          fetchProducts();
-       }, [paginationModel, queryOptions, selectedRows]);
+       }, [paginationModel, queryOptions, selectedRows, refreshSignal]);
 
   return (
       <>
