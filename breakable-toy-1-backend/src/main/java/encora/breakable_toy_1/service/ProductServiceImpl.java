@@ -107,12 +107,12 @@ public class ProductServiceImpl implements ProductService {
             double oldOverallStocks = total.get("Total").getTotalStocks();
             double oldOverallValue = total.get("Total").getTotalValue();
             double newOverallStocks = oldOverallStocks + product.getStock();
-            double newOverallValue = oldOverallValue + totalValue;
+            double newOverallValue = Math.round((oldOverallValue + totalValue) * 100.0) / 100.0;
 
             total.get("Total").setTotalStocks(newOverallStocks);
             total.get("Total").setTotalValue(newOverallValue);
 
-            double newOverallAverage = newOverallValue / newOverallStocks;
+            double newOverallAverage = Math.round((newOverallValue / newOverallStocks) * 100.0) / 100.0;
 
             total.get("Total").setAverage(newOverallAverage);
 
