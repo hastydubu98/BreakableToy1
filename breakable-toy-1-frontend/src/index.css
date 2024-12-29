@@ -21,4 +21,16 @@
     margin: 1%;
 }
 
-.
+.expired-row {
+  background-color: #FE6F6F !important;
+}
+
+.more-than-two-expiration-row {
+  background-color: #91FF79 !important;
+  color: black;
+}
+
+.near-expiration-row {
+  background-color: #FFE879 !important;
+  color: black;
+}

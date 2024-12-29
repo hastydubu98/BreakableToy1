@@ -12,7 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-export default function DataTable({ refreshSignal }) {
+export default function DataTable({ refreshSignal, filter }) {
 
     const [products, setProducts] = React.useState([]);
     const [error, setError] = React.useState(null);
@@ -177,6 +177,40 @@ export default function DataTable({ refreshSignal }) {
          fetchProducts();
        }, [paginationModel, queryOptions, selectedRows, refreshSignal]);
 
+
+     const getRowClassName = (params) => {
+
+         const today = new Date();
+         const expirationDate = new Date(params.row.expirationDate);
+
+         const expirationDateObj = new Date(expirationDate);
+
+         console.log(expirationDateObj.getTime());
+
+         if (expirationDateObj.getTime() == 0) {
+             return '';
+         }
+
+         const oneWeekLater = new Date(today);
+         oneWeekLater.setDate(today.getDate() + 7);
+
+         const twoWeeksLater = new Date(today);
+         twoWeeksLater.setDate(today.getDate() + 14);
+
+         const moreThanTwoWeeks = expirationDate > twoWeeksLater;
+
+         const isNearOneWeek = expirationDate <= oneWeekLater;
+         const isNearTwoWeeks = expirationDate > oneWeekLater && expirationDate <= twoWeeksLater;
+
+         if (isNearOneWeek) {
+             return 'expired-row';
+         } else if (isNearTwoWeeks) {
+             return 'near-expiration-row';
+         } else if (moreThanTwoWeeks) {
+             return 'more-than-two-expiration-row';
+         }
+     };
+
   return (
       <>
         <Dialog
@@ -338,6 +372,7 @@ export default function DataTable({ refreshSignal }) {
                 checkboxSelection
                 loading={loading}
                 onRowSelectionModelChange={handleRowSelectionChange}
+                getRowClassName={getRowClassName}
                 disableRowSelectionOnClick
                 sx={{ border: "2px black solid", }}
               />
