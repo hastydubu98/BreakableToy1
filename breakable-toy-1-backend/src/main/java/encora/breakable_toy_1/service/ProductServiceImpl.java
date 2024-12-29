@@ -77,10 +77,14 @@ public class ProductServiceImpl implements ProductService {
 
         final Map<String, Statistics> total = new HashMap<>();
 
+        Statistics sum = new Statistics(0,0,0);
+
+        total.put("Total", sum);
+
         for(Product product : products)  {
 
-            double totalValue = product.getStock() * product.getPrice();
-            double average = totalValue / product.getStock();
+            double totalValue = Math.round((product.getStock() * product.getPrice()) * 100.0) / 100.0;
+            double average = Math.round((totalValue / product.getStock()) * 100.0) / 100.0;
 
             if (total.containsKey(product.getCategory())) {
 
@@ -94,10 +98,24 @@ public class ProductServiceImpl implements ProductService {
 
             } else {
 
-                final Statistics statistics = new Statistics((double) product.getStock(),totalValue, average);
+                final Statistics statistics = new Statistics((double) product.getStock(), totalValue, average);
 
                 total.put(product.getCategory(), statistics);
+
             }
+
+            double oldOverallStocks = total.get("Total").getTotalStocks();
+            double oldOverallValue = total.get("Total").getTotalValue();
+            double newOverallStocks = oldOverallStocks + product.getStock();
+            double newOverallValue = oldOverallValue + totalValue;
+
+            total.get("Total").setTotalStocks(newOverallStocks);
+            total.get("Total").setTotalValue(newOverallValue);
+
+            double newOverallAverage = newOverallValue / newOverallStocks;
+
+            total.get("Total").setAverage(newOverallAverage);
+
         }
 
         return total;
