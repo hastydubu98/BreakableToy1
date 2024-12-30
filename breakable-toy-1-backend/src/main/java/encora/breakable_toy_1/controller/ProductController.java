@@ -77,10 +77,15 @@ public class ProductController {
     @GetMapping("/pagination")
     public PagedModel<EntityModel<Product>> pagination(@RequestParam int page,
                                                        @RequestParam( required = false ) String sortBy,
-                                                       @RequestParam( required = false ) String direction) {
+                                                       @RequestParam( required = false ) String direction,
+                                                       @RequestParam( required = false ) String name,
+                                                       @RequestParam (required = false) List<String> categories,
+                                                       @RequestParam (required = false) String availability) {
 
         Pageable pageable = PageRequest.of(page, 10);
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = filter(name, categories, availability);
+
+        products = new ArrayList<>(products);
 
         Comparator<Product> comparator;
 
@@ -120,7 +125,7 @@ public class ProductController {
         return pagedResourcesAssembler.toModel(pageProducts);
     }
 
-    @PostMapping("/filter")
+    @GetMapping("/filter")
     public List<Product> filter(@RequestParam (required = false) String name,
                                 @RequestParam (required = false) List<String> categories,
                                 @RequestParam (required = false) String availability) {
@@ -130,7 +135,7 @@ public class ProductController {
         Predicate<Product> combinedPredicate = product -> true;
 
         if (name != null && !name.isEmpty()) {
-           Predicate<Product> filter = product -> product.getName().equalsIgnoreCase(name);
+            Predicate<Product> filter = product -> product.getName().equalsIgnoreCase(name);
             combinedPredicate = combinedPredicate.and(filter);
         }
 
@@ -152,7 +157,6 @@ public class ProductController {
         products = products.stream().filter(combinedPredicate).toList();
 
         return products;
-
     }
 
     @GetMapping("/categories")
