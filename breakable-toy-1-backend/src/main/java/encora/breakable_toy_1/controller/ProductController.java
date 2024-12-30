@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -41,12 +42,26 @@ public class ProductController {
 
     @PostMapping("/products")
     public Product createProduct(@RequestBody Product product) {
-        return productService.createProduct(
-                product.getCategory(),
-                product.getName(),
-                product.getPrice(),
-                product.getExpirationDate(),
-                product.getStock());
+
+        try {
+            if (Objects.equals(product.getCategory(), "")) {
+                throw new ProductCreationException("Product name must be provided");
+            }
+
+            if ( Objects.equals(product.getName(), "")) {
+                throw new ProductCreationException("Product category must be provided");
+            }
+
+            return productService.createProduct(
+                    product.getCategory(),
+                    product.getName(),
+                    product.getPrice(),
+                    product.getExpirationDate(),
+                    product.getStock()
+            );
+        } catch (Exception e) {
+            throw new ProductCreationException("Error creating product: " + e.getMessage());
+        }
     }
 
     @DeleteMapping("/delete")
@@ -171,5 +186,13 @@ public class ProductController {
         }
 
         return categories;
+    }
+
+
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid product data")
+    public class ProductCreationException extends RuntimeException {
+        public ProductCreationException(String message) {
+            super(message);
+        }
     }
 }
