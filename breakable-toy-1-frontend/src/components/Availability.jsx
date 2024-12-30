@@ -6,12 +6,14 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 
-export default function SelectLabels() {
-  const [age, setAge] = React.useState('');
+export default function SelectLabels({ onAvailabilityChange     }) {
+  const [availability, setAvailability] = React.useState('');
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setAvailability(event.target.value)
+    onAvailabilityChange(event.target.value);
   };
+
 
   return (
     <Stack direction='row'>
@@ -23,16 +25,16 @@ export default function SelectLabels() {
         <Select
           labelId="demo-simple-select-helper-label"
           id="demo-simple-select-helper"
-          value={age}
-          label="Age"
+          value={availability}
+          label="Availability"
           onChange={handleChange}
         >
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
+          <MenuItem value={"In stock"}>In stock</MenuItem>
+          <MenuItem value={"Out of stock"}>Out of stock</MenuItem>
+          <MenuItem value={"All"}>All</MenuItem>
         </Select>
       </FormControl>
     </Stack>

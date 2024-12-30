@@ -32,8 +32,8 @@ function Page() {
         });
       };
 
-      const handleFilterChange = (data) => {
-         setFilter(data);
+      const handleFilterChange = (...props) => {
+         setFilter(...props);
       };
 
       const handleSuccessChange = (status) => {
@@ -63,7 +63,11 @@ function Page() {
 
             <FilterContainer onFilterChange={handleFilterChange}/>
             <NewProduct onProductAdded={handleSave} addedSucces={handleSuccessChange}/>
-            <DataTable  refreshSignal={refreshTable} deleteSuccess={handleDeleteSuccessChange}/>
+            <DataTable
+                refreshSignal={refreshTable}
+                deleteSuccess={handleDeleteSuccessChange}
+                newFilter={filter}
+            />
             <InventoryMetrics />
         </>
     )

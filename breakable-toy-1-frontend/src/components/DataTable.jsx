@@ -12,7 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-export default function DataTable({ refreshSignal, deleteSuccess }) {
+export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
 
     const [products, setProducts] = React.useState([]);
     const [error, setError] = React.useState(null);
@@ -45,13 +45,10 @@ export default function DataTable({ refreshSignal, deleteSuccess }) {
       { field: 'expirationDate', headerName: 'Expiration Date', width: 200, align: 'center', headerAlign: 'center', },
       { field: 'stock', headerName: 'Stock', width: 200, type: 'number', align: 'center', headerAlign: 'center',
           renderCell: (params) => {
-              // Get the stock value from the params
-              const stockAmount = params.row.stock; // Assuming 'stock' is the correct field name
+              const stockAmount = params.row.stock;
 
-              // Default class name
               let cellClass = '';
 
-              // Check stock level and assign appropriate class
               if (stockAmount > 10) {
                 cellClass = 'stock-high';
               } else if (stockAmount >= 5 && stockAmount <= 10) {
@@ -180,13 +177,14 @@ export default function DataTable({ refreshSignal, deleteSuccess }) {
            setLoading(true);
            try {
              const response = await
-             fetch(`http://localhost:9090/pagination?page=${paginationModel.page}&sortBy=${queryOptions[0]["field"]}&direction=${queryOptions[0]["sort"]}`, {
+             fetch(`http://localhost:9090/pagination?page=${paginationModel.page}&sortBy=${queryOptions[0]["field"]}&direction=${queryOptions[0]["sort"]}&name=${newFilter[0] || ''}&categories=${newFilter[1] || ''}&availability=${newFilter[2] || ''}`, {
                method: "GET",
                headers: { "Content-Type": "application/json" },
              });
              const data = await response.json();
              setRowCount(data["page"]["totalElements"]);
              setProducts(data["_embedded"]["products"]);
+
            } catch (error) {
              console.error("Error fetching products:", error);
            } finally {
@@ -194,7 +192,7 @@ export default function DataTable({ refreshSignal, deleteSuccess }) {
            }
          };
          fetchProducts();
-       }, [paginationModel, queryOptions, selectedRows, refreshSignal]);
+       }, [paginationModel, queryOptions, selectedRows, refreshSignal, newFilter]);
 
 
      const getRowClassName = (params) => {
