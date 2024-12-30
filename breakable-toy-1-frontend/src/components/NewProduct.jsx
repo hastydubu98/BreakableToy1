@@ -9,9 +9,10 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
 
-export default function BasicButtons({ onProductAdded }) {
+export default function BasicButtons({ onProductAdded, addedSucces}) {
 
     const [open, setOpen] = React.useState(false);
+    const [successAlert, setSuccessAlert] = React.useState(false);
 
       const handleClickOpen = () => {
         setOpen(true);
@@ -26,6 +27,7 @@ export default function BasicButtons({ onProductAdded }) {
       <Container maxWidth="xl" className='margin'>
         <Button variant="contained" onClick={handleClickOpen}>New Product</Button>
       </Container>
+
       <Dialog
           open={open}
           onClose={handleClose}
@@ -47,10 +49,12 @@ export default function BasicButtons({ onProductAdded }) {
                           return response.json();
                       })
                       .then((data) => {
-                          console.log("Product saved:", data);
+                          addedSucces(true);
+                          setTimeout(() => addedSucces(false), 3000);
                           onProductAdded();
                       })
                       .catch((error) => {
+                          addedSucces("error");
                           console.error("Error:", error);
                       });
               handleClose();
