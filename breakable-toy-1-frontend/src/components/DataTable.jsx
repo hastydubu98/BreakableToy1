@@ -194,7 +194,7 @@ export default function DataTable({ refreshSignal, deleteSuccess }) {
            }
          };
          fetchProducts();
-       }, [paginationModel, queryOptions, selectedRows, refreshSignal, deleteSuccess]);
+       }, [paginationModel, queryOptions, selectedRows, refreshSignal]);
 
 
      const getRowClassName = (params) => {
