@@ -12,7 +12,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
-export default function DataTable({ refreshSignal, filter }) {
+export default function DataTable({ refreshSignal, deleteSuccess }) {
 
     const [products, setProducts] = React.useState([]);
     const [error, setError] = React.useState(null);
@@ -43,7 +43,26 @@ export default function DataTable({ refreshSignal, filter }) {
       { field: 'name', headerName: 'Name', width: 200, align: 'center', headerAlign: 'center', },
       { field: 'price', headerName: 'Price', width: 200, align: 'center', headerAlign: 'center', },
       { field: 'expirationDate', headerName: 'Expiration Date', width: 200, align: 'center', headerAlign: 'center', },
-      { field: 'stock', headerName: 'Stock', width: 200, type: 'number', align: 'center', headerAlign: 'center', },
+      { field: 'stock', headerName: 'Stock', width: 200, type: 'number', align: 'center', headerAlign: 'center',
+          renderCell: (params) => {
+              // Get the stock value from the params
+              const stockAmount = params.row.stock; // Assuming 'stock' is the correct field name
+
+              // Default class name
+              let cellClass = '';
+
+              // Check stock level and assign appropriate class
+              if (stockAmount > 10) {
+                cellClass = 'stock-high';
+              } else if (stockAmount >= 5 && stockAmount <= 10) {
+                cellClass = 'stock-mid';
+              } else {
+                cellClass = 'stock-low';
+              }
+
+              return <div className={cellClass}>{stockAmount}</div>;
+            },
+      },
       { field: 'actions', headerName: 'Actions', width: 200, sortable: false,
           align: 'center', headerAlign: 'center', disableColumnMenu: true, disableColumnSelector: true,
           renderCell: (params) => (
@@ -175,7 +194,7 @@ export default function DataTable({ refreshSignal, filter }) {
            }
          };
          fetchProducts();
-       }, [paginationModel, queryOptions, selectedRows, refreshSignal]);
+       }, [paginationModel, queryOptions, selectedRows, refreshSignal, deleteSuccess]);
 
 
      const getRowClassName = (params) => {
@@ -184,8 +203,6 @@ export default function DataTable({ refreshSignal, filter }) {
          const expirationDate = new Date(params.row.expirationDate);
 
          const expirationDateObj = new Date(expirationDate);
-
-         console.log(expirationDateObj.getTime());
 
          if (expirationDateObj.getTime() == 0) {
              return '';
@@ -239,7 +256,8 @@ export default function DataTable({ refreshSignal, filter }) {
                             setProducts((pastData) =>
                                 pastData.filter((product) =>
                                     product.id !== deleteId));
-                            console.log("Product deleted:", deleteId);
+                            deleteSuccess(true);
+                            setTimeout(() => deleteSuccess(false), 3000);
                         })
                         .catch((error) => {
                             console.error("Error:", error);

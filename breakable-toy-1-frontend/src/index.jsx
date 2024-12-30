@@ -20,9 +20,10 @@ const root = createRoot(document.getElementById("root"))
 
 function Page() {
 
+      const [deleteSuccess, setDeleteSuccess] = React.useState(false);
       const [refreshTable, setRefreshTable] = React.useState(false);
       const [filter, setFilter] = React.useState(false);
-      const [success, setSuccess] = React.useState(false);
+      const [createSuccess, setCreateSuccess] = React.useState(false);
 
       const handleSave = () => {
         setRefreshTable((prev) => {
@@ -36,20 +37,33 @@ function Page() {
       };
 
       const handleSuccessChange = (status) => {
-         setSuccess(status);
+         setCreateSuccess(status);
+      };
+
+      const handleDeleteSuccessChange = (status) =>  {
+         setDeleteSuccess(status);
       };
 
     return (
         <>
-            {success && (
+            {createSuccess && (
                     <Alert severity="success" style={{ margin: "1rem" }}>
                       <AlertTitle>Success</AlertTitle>
-                      Your product has been successfully created!
+                      The product has been successfully created!
                     </Alert>
             )}
+
+            {deleteSuccess && (
+                    <Alert severity="success" style={{ margin: "1rem" }}>
+                      <AlertTitle>Success</AlertTitle>
+                      The product has been successfully deleted!
+                    </Alert>
+            )}
+
+
             <FilterContainer onFilterChange={handleFilterChange}/>
             <NewProduct onProductAdded={handleSave} addedSucces={handleSuccessChange}/>
-            <DataTable  refreshSignal={refreshTable}/>
+            <DataTable  refreshSignal={refreshTable} deleteSuccess={handleDeleteSuccessChange}/>
             <InventoryMetrics />
         </>
     )
