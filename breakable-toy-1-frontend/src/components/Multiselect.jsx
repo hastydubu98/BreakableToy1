@@ -19,31 +19,38 @@ const MenuProps = {
   },
 };
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
+export default function MultipleSelectCheckmarks({ onCategoriesChange }) {
 
-export default function MultipleSelectCheckmarks() {
-  const [personName, setPersonName] = React.useState([]);
+  const [category, setCategory] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setPersonName(
-      // On autofill we get a stringified value.
+    setCategory(
       typeof value === 'string' ? value.split(',') : value,
     );
+    onCategoriesChange(value);
   };
+
+  React.useEffect(() => {
+           const fetchProducts = async () => {
+             try {
+               const response = await
+               fetch(`http://localhost:9090/categories`, {
+                 method: "GET",
+                 headers: { "Content-Type": "application/json" },
+               });
+               const data = await response.json();
+               setCategories(data);
+             } catch (error) {
+               console.error("Error fetching products:", error);
+             } finally {
+             }
+           };
+           fetchProducts();
+  }, []);
 
   return (
     <Stack direction='row'>
@@ -51,21 +58,21 @@ export default function MultipleSelectCheckmarks() {
         <p className="filter">Category</p>
       </div>
       <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="demo-multiple-checkbox-label">All</InputLabel>
+        <InputLabel id="multiple-checkbox-label">All</InputLabel>
         <Select
-          labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
+          labelId="multiple-checkbox-label"
+          id="multiple-checkbox"
           multiple
-          value={personName}
+          value={category}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
-          {names.map((name) => (
-            <MenuItem key={name} value={name}>
-              <Checkbox checked={personName.includes(name)} />
-              <ListItemText primary={name} />
+          {categories.map((categoryName) => (
+            <MenuItem key={categoryName} value={categoryName}>
+              <Checkbox checked={category.includes(categoryName)} />
+              <ListItemText primary={categoryName} />
             </MenuItem>
           ))}
         </Select>
