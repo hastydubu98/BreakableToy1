@@ -13,9 +13,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 @RestController
@@ -157,5 +155,17 @@ public class ProductController {
 
     }
 
+    @GetMapping("/categories")
+    public List<String> categories() {
 
+        List<String> categories = new ArrayList<>();
+
+        List<Product> products = getAllProducts();
+
+        for (Product product : products) {
+            categories.add(product.getCategory());
+        }
+
+        return categories;
+    }
 }
