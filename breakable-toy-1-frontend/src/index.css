@@ -6,6 +6,10 @@
     width: 10px;
 }
 
+.expired-row {
+  background-color: #FE6F6F !important;
+}
+
 .filter {
     margin-top: 25px;
     margin-left: 10px;
@@ -21,16 +25,26 @@
     margin: 1%;
 }
 
-.expired-row {
-  background-color: #FE6F6F !important;
-}
 
 .more-than-two-expiration-row {
-  background-color: #91FF79 !important;
+  background-color: #9BFF84 !important;
   color: black;
 }
 
 .near-expiration-row {
   background-color: #FFE879 !important;
   color: black;
+}
+
+.stock-high {
+    background-color: white;
+}
+
+.stock-mid {
+    background-color: #FFC779;
+}
+
+.stock-low {
+    background-color: #FE6F6F;
+
 }
