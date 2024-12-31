@@ -9,7 +9,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 
 
-export default function BasicButtons({ onProductAdded, addedSucces}) {
+export default function BasicButtons({ onProductAdded, addedSuccess, addedError}) {
 
     const [open, setOpen] = React.useState(false);
     const [successAlert, setSuccessAlert] = React.useState(false);
@@ -44,18 +44,19 @@ export default function BasicButtons({ onProductAdded, addedSucces}) {
                   })
                       .then((response) => {
                           if (!response.ok) {
-                              throw new Error("Network response was not ok");
+                              throw new Error("Missing information");
                           }
                           return response.json();
                       })
                       .then((data) => {
-                          addedSucces(true);
-                          setTimeout(() => addedSucces(false), 3000);
+                          addedSuccess(true);
+                          setTimeout(() => addedSuccess(false), 3000);
                           onProductAdded();
                       })
                       .catch((error) => {
-                          addedSucces("error");
-                          console.error("Error:", error);
+                          addedError(true);
+                          setTimeout(() => addedError(false), 3000);
+                          console.error(error);
                       });
               handleClose();
             },

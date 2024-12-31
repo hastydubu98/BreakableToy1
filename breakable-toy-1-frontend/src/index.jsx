@@ -24,6 +24,7 @@ function Page() {
       const [refreshTable, setRefreshTable] = React.useState(false);
       const [filter, setFilter] = React.useState(false);
       const [createSuccess, setCreateSuccess] = React.useState(false);
+      const [createError, setCreateError] = React.useState(false);
 
       const handleSave = () => {
         setRefreshTable((prev) => {
@@ -40,6 +41,10 @@ function Page() {
          setCreateSuccess(status);
       };
 
+      const handleErrorChange = (status) => {
+          setCreateError(status);
+      };
+
       const handleDeleteSuccessChange = (status) =>  {
          setDeleteSuccess(status);
       };
@@ -53,6 +58,13 @@ function Page() {
                     </Alert>
             )}
 
+            {createError && (
+                    <Alert severity="error" style={{ margin: "1rem" }}>
+                      <AlertTitle>Error</AlertTitle>
+                      Missing necessary information to create product.
+                    </Alert>
+                )}
+
             {deleteSuccess && (
                     <Alert severity="success" style={{ margin: "1rem" }}>
                       <AlertTitle>Success</AlertTitle>
@@ -62,7 +74,7 @@ function Page() {
 
 
             <FilterContainer onFilterChange={handleFilterChange}/>
-            <NewProduct onProductAdded={handleSave} addedSucces={handleSuccessChange}/>
+            <NewProduct onProductAdded={handleSave} addedSuccess={handleSuccessChange} addedError={handleErrorChange}/>
             <DataTable
                 refreshSignal={refreshTable}
                 deleteSuccess={handleDeleteSuccessChange}

@@ -190,7 +190,7 @@ public class ProductController {
 
 
     @ResponseStatus(value = HttpStatus.BAD_REQUEST, reason = "Invalid product data")
-    public class ProductCreationException extends RuntimeException {
+    public static class ProductCreationException extends RuntimeException {
         public ProductCreationException(String message) {
             super(message);
         }
