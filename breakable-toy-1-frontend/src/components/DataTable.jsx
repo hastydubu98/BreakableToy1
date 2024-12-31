@@ -30,6 +30,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
     const [deleteId, setDeleteId] = React.useState(null);
     const [deleteOpen, setDeleteOpen] = React.useState(false);
     const [selectedRows, setSelectedRows] = React.useState([]);
+    const [editData, setEditData] = React.useState([]);
 
     if (queryOptions.length == 0) {
             setQueryOptions([{
@@ -66,7 +67,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
           renderCell: (params) => (
               <>
                 <ButtonGroup variant="text" aria-label="Basic button group">
-                  <Button onClick={() => handleEditClickOpen(params.row.id)}>Edit</Button>
+                  <Button onClick={() => handleEditClickOpen(params.row)}>Edit</Button>
                   <Button onClick={() => handleDeleteClickOpen(params.row.id)}>Delete</Button>
                 </ButtonGroup>
               </>
@@ -82,8 +83,9 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
         setDeleteOpen(false);
     };
 
-    const handleEditClickOpen = (id) => {
-        setEditId(id);
+    const handleEditClickOpen = (row) => {
+        setEditData([row.category, row.name, row.stock, row.price, row.expirationDate]);
+        setEditId(row.id);
         setEditOpen(true);
     };
 
@@ -329,6 +331,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 type="text"
                 fullWidth
                 variant="standard"
+                defaultValue={editData[0]}
               />
               <TextField
                 required
@@ -339,6 +342,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 type="text"
                 fullWidth
                 variant="standard"
+                defaultValue={editData[1]}
               />
               <TextField
                 required
@@ -349,6 +353,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 type="number"
                 fullWidth
                 variant="standard"
+                defaultValue={editData[2]}
               />
               <TextField
                 required
@@ -359,6 +364,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 type="number"
                 fullWidth
                 variant="standard"
+                defaultValue={editData[3]}
               />
               <TextField
                 margin="dense"
@@ -368,6 +374,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 fullWidth
                 variant="standard"
                 helperText="Expiration Date"
+                defaultValue={editData[4]}
               />
             </DialogContent>
             <DialogActions>
