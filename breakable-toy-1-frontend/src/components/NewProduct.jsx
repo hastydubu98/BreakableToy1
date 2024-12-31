@@ -84,6 +84,7 @@ export default function BasicButtons({ onProductAdded, addedSuccess, addedError}
               type="text"
               fullWidth
               variant="standard"
+              inputProps={{ maxLength: 120 }}
             />
             <TextField
               required

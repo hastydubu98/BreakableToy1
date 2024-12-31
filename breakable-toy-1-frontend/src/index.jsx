@@ -61,7 +61,7 @@ function Page() {
             {createError && (
                     <Alert severity="error" style={{ margin: "1rem" }}>
                       <AlertTitle>Error</AlertTitle>
-                      Missing necessary information to create product.
+                      Invalid information.
                     </Alert>
                 )}
 

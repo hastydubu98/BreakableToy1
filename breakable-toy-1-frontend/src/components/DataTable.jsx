@@ -343,6 +343,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
                 fullWidth
                 variant="standard"
                 defaultValue={editData[1]}
+                inputProps={{ maxLength: 120 }}
               />
               <TextField
                 required
@@ -385,7 +386,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
 
 
           <Container maxWidth="xl" >
-            <Paper sx={{ height: 630, width: '100%' }}>
+            <Paper sx={{ height: 635, width: '100%' }}>
               <DataGrid
                 rows={products}
                 columns={columns}

@@ -44,6 +44,11 @@ public class ProductController {
     public Product createProduct(@RequestBody Product product) {
 
         try {
+
+            if (product.getName().length() > 120) {
+                throw new ProductCreationException("Product name must have less than 120 characters");
+            }
+
             if (Objects.equals(product.getCategory(), "")) {
                 throw new ProductCreationException("Product name must be provided");
             }
