@@ -45,6 +45,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
       { field: 'expirationDate', headerName: 'Expiration Date', width: 200, align: 'center', headerAlign: 'center', },
       { field: 'stock', headerName: 'Stock', width: 200, type: 'number', align: 'center', headerAlign: 'center',
           renderCell: (params) => {
+
               const stockAmount = params.row.stock;
 
               let cellClass = '';
@@ -197,33 +198,36 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
 
      const getRowClassName = (params) => {
 
-         const today = new Date();
-         const expirationDate = new Date(params.row.expirationDate);
+         const classes = [];
 
-         const expirationDateObj = new Date(expirationDate);
+             const stockAmount = params.row.stock;
+             const expirationDate = new Date(params.row.expirationDate);
+             const today = new Date();
 
-         if (expirationDateObj.getTime() == 0) {
-             return '';
-         }
+             // Apply the strike-through class if stock is 0
+             if (stockAmount === 0) {
+                 classes.push('strike-through-row');
+             }
 
-         const oneWeekLater = new Date(today);
-         oneWeekLater.setDate(today.getDate() + 7);
+             // Expiration-based logic
+             if (expirationDate.getTime() !== 0) {
+                 const oneWeekLater = new Date(today);
+                 oneWeekLater.setDate(today.getDate() + 7);
 
-         const twoWeeksLater = new Date(today);
-         twoWeeksLater.setDate(today.getDate() + 14);
+                 const twoWeeksLater = new Date(today);
+                 twoWeeksLater.setDate(today.getDate() + 14);
 
-         const moreThanTwoWeeks = expirationDate > twoWeeksLater;
+                 if (expirationDate <= oneWeekLater) {
+                     classes.push('expired-row');
+                 } else if (expirationDate > oneWeekLater && expirationDate <= twoWeeksLater) {
+                     classes.push('near-expiration-row');
+                 } else if (expirationDate > twoWeeksLater) {
+                     classes.push('more-than-two-expiration-row');
+                 }
+             }
 
-         const isNearOneWeek = expirationDate <= oneWeekLater;
-         const isNearTwoWeeks = expirationDate > oneWeekLater && expirationDate <= twoWeeksLater;
-
-         if (isNearOneWeek) {
-             return 'expired-row';
-         } else if (isNearTwoWeeks) {
-             return 'near-expiration-row';
-         } else if (moreThanTwoWeeks) {
-             return 'more-than-two-expiration-row';
-         }
+             // Return a space-separated string of all applicable classes
+             return classes.join(' ');
      };
 
   return (

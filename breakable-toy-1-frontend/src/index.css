@@ -46,5 +46,9 @@
 
 .stock-low {
     background-color: #FE6F6F;
+}
 
+.strike-through-row {
+    text-decoration: line-through;
+    color: gray;
 }

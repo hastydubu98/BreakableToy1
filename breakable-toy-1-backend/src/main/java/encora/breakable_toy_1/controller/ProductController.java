@@ -145,6 +145,10 @@ public class ProductController {
                                 @RequestParam (required = false) List<String> categories,
                                 @RequestParam (required = false) String availability) {
 
+        List<String> availableCategories =  categories();
+
+        boolean notAvailableCategory =  availableCategories.containsAll(categories);
+
         List<Product> products = getAllProducts();
 
         Predicate<Product> combinedPredicate = product -> true;
@@ -195,4 +199,5 @@ public class ProductController {
             super(message);
         }
     }
+
 }
