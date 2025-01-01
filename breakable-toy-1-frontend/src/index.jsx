@@ -6,10 +6,10 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import FilterContainer from './components/FilterContainer'
-import NewProduct from './components/NewProduct'
-import DataTable from './components/DataTable'
-import InventoryMetrics from './components/InventoryMetrics'
+import FilterContainer from './components/FilterContainer/FilterContainer'
+import NewProduct from './components/NewProduct/NewProduct'
+import DataTable from './components/DataTable/DataTable'
+import InventoryMetrics from './components/InventoryMetrics/InventoryMetrics'
 
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';

@@ -7,9 +7,9 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { grey } from '@mui/material/colors';
 
-import TextField from './TextField'
-import Multiselect from './Multiselect'
-import Availability from './Availability'
+import TextField from '../TextField/TextField'
+import Multiselect from '../Multiselect/Multiselect'
+import Availability from '../Availability/Availability'
 
 const ColorButton = styled(Button)(({ theme }) => ({
   color: theme.palette.getContrastText(grey[500]),

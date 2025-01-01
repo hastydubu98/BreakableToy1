@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Filter from './Filter'
+import Filter from '../Filter/Filter'
 
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
