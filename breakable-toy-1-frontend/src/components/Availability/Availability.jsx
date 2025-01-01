@@ -6,7 +6,7 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 
-export default function SelectLabels({ onAvailabilityChange     }) {
+export default function SelectLabels({ onAvailabilityChange }) {
   const [availability, setAvailability] = React.useState('');
 
   const handleChange = (event) => {
@@ -30,11 +30,10 @@ export default function SelectLabels({ onAvailabilityChange     }) {
           onChange={handleChange}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>All</em>
           </MenuItem>
           <MenuItem value={"In stock"}>In stock</MenuItem>
           <MenuItem value={"Out of stock"}>Out of stock</MenuItem>
-          <MenuItem value={"All"}>All</MenuItem>
         </Select>
       </FormControl>
     </Stack>

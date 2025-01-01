@@ -54,7 +54,7 @@ export default function RowAndColumnSpacing({ onFilterComplete }) {
             <Multiselect onCategoriesChange={ handleCategoriesChange }/>
         </Grid>
         <Grid size={12} className="filter-row">
-                <Availability onAvailabilityChange={ handleAvailabilityChange }/>
+                    <Availability onAvailabilityChange={ handleAvailabilityChange }/>
             <ColorButton
                 disableElevation
                 variant="contained"

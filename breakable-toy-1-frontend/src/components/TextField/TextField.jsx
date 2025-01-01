@@ -22,7 +22,7 @@ export default function TextFieldSizes({ onTextChange }) {
           <div style={{width: '100px'}}>
             <p className="filter">Name</p>
           </div>
-          <TextField id="outlined-size-normal" defaultValue="None" onChange={handleChange}/>
+          <TextField id="outlined-size-normal" defaultValue="None" label="Name" onChange={handleChange}/>
       </Stack>
     </Box>
   );

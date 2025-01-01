@@ -113,12 +113,13 @@ export default function BasicButtons({ onProductAdded, addedSuccess, addedError}
               type="date"
               fullWidth
               variant="standard"
+              label="Expiration Date"
               helperText="Expiration Date"
             />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Cancel</Button>
-            <Button type="submit">Add</Button>
+            <Button label="Add" type="submit">Add</Button>
           </DialogActions>
       </Dialog>
       </>
