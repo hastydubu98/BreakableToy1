@@ -114,7 +114,9 @@ export default function BasicButtons({ onProductAdded, addedSuccess, addedError}
               fullWidth
               variant="standard"
               label="Expiration Date"
-              helperText="Expiration Date"
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
           </DialogContent>
           <DialogActions>

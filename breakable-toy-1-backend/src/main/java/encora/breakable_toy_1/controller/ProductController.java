@@ -99,8 +99,8 @@ public class ProductController {
                                                        @RequestParam( required = false ) String sortBy,
                                                        @RequestParam( required = false ) String direction,
                                                        @RequestParam( required = false ) String name,
-                                                       @RequestParam (required = false) List<String> categories,
-                                                       @RequestParam (required = false) String availability) {
+                                                       @RequestParam( required = false ) List<String> categories,
+                                                       @RequestParam( required = false ) String availability) {
 
         Pageable pageable = PageRequest.of(page, 10);
         List<Product> products = filter(name, categories, availability);
