@@ -1,5 +1,6 @@
 package encora.breakable_toy_1.repository;
 
+import encora.breakable_toy_1.factory.ProductFactory;
 import encora.breakable_toy_1.model.Product;
 import org.springframework.stereotype.Repository;
 
@@ -8,7 +9,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Repository
-public class ProductRepositoryInMemoryImpl implements ProductRepository{
+public class ProductRepositoryInMemoryImpl implements ProductRepository {
 
     private final ArrayList<Product> products;
     private final AtomicLong counter = new AtomicLong();
@@ -20,7 +21,7 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
     @Override
     public Product getProduct(long id) {
-        for(Product product : products)  {
+        for (Product product : products) {
             if (product.getId() == id) {
                 return product;
             }
@@ -35,20 +36,15 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
 
     @Override
     public Product create(String category, String name, double price, LocalDate expirationDate, long stock) {
-
-        LocalDate creationDate =  LocalDate.now();
-
-        Product product = new Product(counter.incrementAndGet(), category, name, price, expirationDate,
-                creationDate, null, stock);
-
+        Product product = ProductFactory.createProductWithValues(
+                counter.incrementAndGet(), category, name, price, expirationDate, stock
+        );
         products.add(product);
-
         return product;
     }
 
     @Override
     public boolean delete(long id) {
-
         return products.removeIf(product -> product.getId() == id);
     }
 
@@ -66,7 +62,7 @@ public class ProductRepositoryInMemoryImpl implements ProductRepository{
         return oldProduct;
     }
 
-    public void dummyData () {
+    public void dummyData() {
         List<String> CATEGORIES = Arrays.asList(
                 "Mobile Accessories",
                 "Home Appliances",

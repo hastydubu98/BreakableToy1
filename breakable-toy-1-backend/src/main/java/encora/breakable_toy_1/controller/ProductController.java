@@ -1,6 +1,7 @@
 package encora.breakable_toy_1.controller;
 
 import encora.breakable_toy_1.dto.ProductDTO;
+import encora.breakable_toy_1.factory.ProductFactory;
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.service.ProductService;
@@ -61,8 +62,14 @@ public class ProductController {
 
     @PutMapping("/products/{id}")
     public Product updateProduct(@PathVariable long id, @Valid @RequestBody ProductDTO productDTO) {
-        Product product = new Product.Builder(id, productDTO.getCategory(), productDTO.getName(), productDTO.getPrice(),
-                productDTO.getExpirationDate(), null, null, productDTO.getStock()).build();
+        Product product = ProductFactory.createProductWithValues(
+                id,
+                productDTO.getCategory(),
+                productDTO.getName(),
+                productDTO.getPrice(),
+                productDTO.getExpirationDate(),
+                productDTO.getStock()
+        );
         return productService.updateProduct(id, product);
     }
 
