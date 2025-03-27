@@ -6,33 +6,37 @@ import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 
+import { updateProduct } from '../../api/api'; // Import the updateProduct function
+
+/**
+ * EditDialog component for editing a product.
+ * @param {boolean} open - Whether the dialog is open.
+ * @param {function} onClose - Function to close the dialog.
+ * @param {Array} editData - Data of the product being edited.
+ * @param {string} editId - ID of the product being edited.
+ * @param {function} setProducts - Function to update the products state.
+ */
 export default function EditDialog({ open, onClose, editData, editId, setProducts }) {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const formJson = Object.fromEntries(formData.entries());
 
-    fetch(`http://localhost:9090/products/${editId}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formJson),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((updatedData) => {
-        setProducts((pastData) =>
-          pastData.map((product) => (product.id === editId ? updatedData : product))
-        );
-        console.log('Product saved:', updatedData);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    try {
+      // Use the updateProduct function from api.jsx
+      const updatedData = await updateProduct(editId, formJson);
 
+      // Update the products state with the updated product
+      setProducts((pastData) =>
+        pastData.map((product) => (product.id === editId ? updatedData : product))
+      );
+
+      console.log('Product updated successfully:', updatedData);
+    } catch (error) {
+      console.error('Error updating product:', error);
+    }
+
+    // Close the dialog
     onClose();
   };
 

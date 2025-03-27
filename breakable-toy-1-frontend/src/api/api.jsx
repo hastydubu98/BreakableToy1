@@ -31,13 +31,23 @@ export const deleteProduct = async (id) => {
   return response.json();
 };
 
+/**
+ * Updates a product with the given data.
+ * @param {string} id - The ID of the product to update.
+ * @param {Object} productData - The updated product data.
+ * @returns {Promise<Object>} - The updated product.
+ */
 export const updateProduct = async (id, productData) => {
   const response = await fetch(`${BASE_URL}/products/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(productData),
   });
-  if (!response.ok) throw new Error("Failed to update product");
+
+  if (!response.ok) {
+    throw new Error('Failed to update product');
+  }
+
   return response.json();
 };
 
@@ -59,5 +69,39 @@ export const fetchCategories = async () => {
     headers: { 'Content-Type': 'application/json' },
   });
   if (!response.ok) throw new Error('Failed to fetch categories');
+  return response.json();
+};
+
+/**
+ * Marks a product as out of stock.
+ * @param {string} id - The ID of the product to mark as out of stock.
+ */
+export const markProductOutOfStock = async (id) => {
+  const response = await fetch(`${BASE_URL}/products/${id}/outofstock`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to mark product ${id} as out of stock`);
+  }
+
+  return response.json();
+};
+
+/**
+ * Marks a product as in stock.
+ * @param {string} id - The ID of the product to mark as in stock.
+ */
+export const markProductInStock = async (id) => {
+  const response = await fetch(`${BASE_URL}/products/${id}/instock`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to mark product ${id} as in stock`);
+  }
+
   return response.json();
 };

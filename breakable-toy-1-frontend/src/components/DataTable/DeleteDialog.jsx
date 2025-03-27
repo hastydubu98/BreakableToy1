@@ -6,29 +6,27 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 
+import { deleteProduct } from '../../api/api'; // Import the deleteProduct function
+
 export default function DeleteDialog({ open, onClose, deleteId, setProducts, deleteSuccess }) {
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
-    fetch(`http://localhost:9090/delete?id=${deleteId}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(() => {
-        setProducts((pastData) => pastData.filter((product) => product.id !== deleteId));
-        deleteSuccess(true);
-        setTimeout(() => deleteSuccess(false), 3000);
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+    try {
+      // Use the deleteProduct function from api.jsx
+      await deleteProduct(deleteId);
 
+      // Update the products state to remove the deleted product
+      setProducts((pastData) => pastData.filter((product) => product.id !== deleteId));
+
+      // Notify the user of successful deletion
+      deleteSuccess(true);
+      setTimeout(() => deleteSuccess(false), 3000);
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    }
+
+    // Close the dialog
     onClose();
   };
 
