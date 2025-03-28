@@ -20,11 +20,16 @@ const MenuProps = {
   },
 };
 
+/**
+ * MultipleSelectCheckmarks component for selecting categories.
+ * @param {function} onCategoriesChange - Callback to pass selected categories to the parent component.
+ */
 export default function MultipleSelectCheckmarks({ onCategoriesChange }) {
   const [selectedCategories, setSelectedCategories] = React.useState([]);
   const [categories, setCategories] = React.useState([]);
   const [error, setError] = React.useState(null);
 
+  // Fetch categories from the backend
   React.useEffect(() => {
     const fetchData = async () => {
       try {
@@ -39,6 +44,7 @@ export default function MultipleSelectCheckmarks({ onCategoriesChange }) {
     fetchData();
   }, []);
 
+  // Handle category selection changes
   const handleChange = (event) => {
     const {
       target: { value },

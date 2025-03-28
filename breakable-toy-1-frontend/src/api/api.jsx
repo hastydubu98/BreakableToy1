@@ -1,5 +1,10 @@
-const BASE_URL = "http://localhost:9090";
+const BASE_URL = "http://localhost:9090"; // Base URL for the API
 
+/**
+ * Fetches products from the backend with query parameters.
+ * @param {string} queryParams - Query parameters for filtering and pagination.
+ * @returns {Promise<Object>} - The fetched product data.
+ */
 export const fetchProducts = async (queryParams) => {
   const response = await fetch(`${BASE_URL}/pagination?${queryParams}`, {
     method: "GET",
@@ -12,6 +17,11 @@ export const fetchProducts = async (queryParams) => {
   return response.json();
 };
 
+/**
+ * Creates a new product in the backend.
+ * @param {Object} productData - The data of the product to create.
+ * @returns {Promise<Object>} - The created product.
+ */
 export const createProduct = async (productData) => {
   const response = await fetch(`${BASE_URL}/products`, {
     method: "POST",
@@ -22,6 +32,11 @@ export const createProduct = async (productData) => {
   return response.json();
 };
 
+/**
+ * Deletes a product by ID.
+ * @param {string} id - The ID of the product to delete.
+ * @returns {Promise<Object>} - The response from the backend.
+ */
 export const deleteProduct = async (id) => {
   const response = await fetch(`${BASE_URL}/delete?id=${id}`, {
     method: "DELETE",
@@ -51,6 +66,10 @@ export const updateProduct = async (id, productData) => {
   return response.json();
 };
 
+/**
+ * Fetches inventory metrics from the backend.
+ * @returns {Promise<Object>} - The inventory metrics.
+ */
 export const fetchInventoryMetrics = async () => {
   const response = await fetch(`${BASE_URL}/total`, {
     method: "GET",
@@ -63,6 +82,10 @@ export const fetchInventoryMetrics = async () => {
   return response.json();
 };
 
+/**
+ * Fetches product categories from the backend.
+ * @returns {Promise<Object>} - The fetched categories.
+ */
 export const fetchCategories = async () => {
   const response = await fetch(`${BASE_URL}/categories`, {
     method: 'GET',
@@ -75,6 +98,7 @@ export const fetchCategories = async () => {
 /**
  * Marks a product as out of stock.
  * @param {string} id - The ID of the product to mark as out of stock.
+ * @returns {Promise<Object>} - The response from the backend.
  */
 export const markProductOutOfStock = async (id) => {
   const response = await fetch(`${BASE_URL}/products/${id}/outofstock`, {
@@ -92,6 +116,7 @@ export const markProductOutOfStock = async (id) => {
 /**
  * Marks a product as in stock.
  * @param {string} id - The ID of the product to mark as in stock.
+ * @returns {Promise<Object>} - The response from the backend.
  */
 export const markProductInStock = async (id) => {
   const response = await fetch(`${BASE_URL}/products/${id}/instock`, {

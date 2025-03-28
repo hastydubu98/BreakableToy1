@@ -1,4 +1,4 @@
-import { markProductOutOfStock, markProductInStock } from '../api/api'; // Import the new API functions
+import { markProductOutOfStock, markProductInStock } from '../api/api'; // Import API functions for marking products
 
 /**
  * Handles row selection changes by marking products as "out of stock" or "in stock."
@@ -10,7 +10,7 @@ export const handleRowSelection = async (addedIds, removedIds) => {
   if (addedIds.length > 0) {
     for (const id of addedIds) {
       try {
-        // Use the API function to mark the product as out of stock
+        // Call API to mark the product as out of stock
         await markProductOutOfStock(id);
         console.log(`Product marked as out of stock: ${id}`);
       } catch (error) {
@@ -23,7 +23,7 @@ export const handleRowSelection = async (addedIds, removedIds) => {
   if (removedIds.length > 0) {
     for (const id of removedIds) {
       try {
-        // Use the API function to mark the product as in stock
+        // Call API to mark the product as in stock
         await markProductInStock(id);
         console.log(`Product marked as in stock: ${id}`);
       } catch (error) {
