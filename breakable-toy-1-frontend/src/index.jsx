@@ -1,90 +1,84 @@
 import * as React from 'react';
-
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-import FilterContainer from './components/FilterContainer/FilterContainer'
-import NewProduct from './components/NewProduct/NewProduct'
-import DataTable from './components/DataTable/DataTable'
-import InventoryMetrics from './components/InventoryMetrics/InventoryMetrics'
+import FilterContainer from './components/FIlterContainer/FilterContainer';
+import NewProduct from './components/NewProduct/NewProduct';
+import DataTable from './components/DataTable/DataTable';
+import InventoryMetrics from './components/InventoryMetrics/InventoryMetrics';
+import { GlobalProvider } from './context/GlobalContext'; // Import the GlobalProvider
 
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import CheckIcon from '@mui/icons-material/Check';
-import Divider from '@mui/material/Divider';
 
-const root = createRoot(document.getElementById("root"))
+const root = createRoot(document.getElementById("root"));
 
+/**
+ * Main Page component that renders the application.
+ */
 function Page() {
-
-      const [deleteSuccess, setDeleteSuccess] = React.useState(false);
-      const [refreshTable, setRefreshTable] = React.useState(false);
-      const [filter, setFilter] = React.useState(false);
-      const [createSuccess, setCreateSuccess] = React.useState(false);
-      const [createError, setCreateError] = React.useState(false);
-
-      const handleSave = () => {
-        setRefreshTable((prev) => {
-            const newState = !prev;
-            return newState;
-        });
-      };
-
-      const handleFilterChange = (...props) => {
-         setFilter(...props);
-      };
-
-      const handleSuccessChange = (status) => {
-         setCreateSuccess(status);
-      };
-
-      const handleErrorChange = (status) => {
-          setCreateError(status);
-      };
-
-      const handleDeleteSuccessChange = (status) =>  {
-         setDeleteSuccess(status);
-      };
-
-    return (
-        <>
-            {createSuccess && (
-                    <Alert severity="success" style={{ margin: "1rem" }}>
-                      <AlertTitle>Success</AlertTitle>
-                      The product has been successfully created!
-                    </Alert>
-            )}
-
-            {createError && (
-                    <Alert severity="error" style={{ margin: "1rem" }}>
-                      <AlertTitle>Error</AlertTitle>
-                      Invalid information.
-                    </Alert>
-                )}
-
-            {deleteSuccess && (
-                    <Alert severity="success" style={{ margin: "1rem" }}>
-                      <AlertTitle>Success</AlertTitle>
-                      The product has been successfully deleted!
-                    </Alert>
-            )}
-
-
-            <FilterContainer onFilterChange={handleFilterChange}/>
-            <NewProduct onProductAdded={handleSave} addedSuccess={handleSuccessChange} addedError={handleErrorChange}/>
-            <DataTable
-                refreshSignal={refreshTable}
-                deleteSuccess={handleDeleteSuccessChange}
-                newFilter={filter}
-            />
-            <InventoryMetrics />
-        </>
-    )
+  return (
+    <GlobalProvider>
+      <App />
+    </GlobalProvider>
+  );
 }
 
-root.render(
-    <Page />
-)
+/**
+ * App component that contains the main application logic.
+ */
+function App() {
+  const [createSuccess, setCreateSuccess] = React.useState(false); // Tracks product creation success
+  const [createError, setCreateError] = React.useState(false); // Tracks product creation errors
+
+  // Update the success state for product creation
+  const handleSuccessChange = (status) => {
+    setCreateSuccess(status);
+  };
+
+  // Update the error state for product creation
+  const handleErrorChange = (status) => {
+    setCreateError(status);
+  };
+
+  return (
+    <>
+      {/* Display success alert for product creation */}
+      {createSuccess && (
+        <Alert severity="success" style={{ margin: "1rem" }}>
+          <AlertTitle>Success</AlertTitle>
+          The product has been successfully created!
+        </Alert>
+      )}
+
+      {/* Display error alert for product creation */}
+      {createError && (
+        <Alert severity="error" style={{ margin: "1rem" }}>
+          <AlertTitle>Error</AlertTitle>
+          Invalid information.
+        </Alert>
+      )}
+
+      {/* Render the filter container */}
+      <FilterContainer />
+
+      {/* Render the new product form */}
+      <NewProduct
+        addedSuccess={handleSuccessChange}
+        addedError={handleErrorChange}
+      />
+
+      {/* Render the data table */}
+      <DataTable />
+
+      {/* Render the inventory metrics */}
+      <InventoryMetrics />
+    </>
+  );
+}
+
+// Render the application
+root.render(<Page />);

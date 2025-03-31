@@ -7,6 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
+import { fetchCategories } from '../../api/api'; // Import the API function
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -19,42 +20,43 @@ const MenuProps = {
   },
 };
 
+/**
+ * MultipleSelectCheckmarks component for selecting categories.
+ * @param {function} onCategoriesChange - Callback to pass selected categories to the parent component.
+ */
 export default function MultipleSelectCheckmarks({ onCategoriesChange }) {
-
-  const [category, setCategory] = React.useState([]);
+  const [selectedCategories, setSelectedCategories] = React.useState([]);
   const [categories, setCategories] = React.useState([]);
+  const [error, setError] = React.useState(null);
 
+  // Fetch categories from the backend
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchCategories(); // Use the centralized API function
+        setCategories(data);
+      } catch (err) {
+        console.error('Error fetching categories:', err);
+        setError(err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Handle category selection changes
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setCategory(
-      typeof value === 'string' ? value.split(',') : value,
-    );
-    onCategoriesChange(value);
+    const selected = typeof value === 'string' ? value.split(',') : value;
+    setSelectedCategories(selected);
+    onCategoriesChange(selected); // Pass selected categories to parent
   };
 
-  React.useEffect(() => {
-           const fetchProducts = async () => {
-             try {
-               const response = await
-               fetch(`http://localhost:9090/categories`, {
-                 method: "GET",
-                 headers: { "Content-Type": "application/json" },
-               });
-               const data = await response.json();
-               setCategories(data);
-             } catch (error) {
-               console.error("Error fetching products:", error);
-             } finally {
-             }
-           };
-           fetchProducts();
-  }, []);
-
   return (
-    <Stack direction='row'>
-      <div style={{width: '100px'}}>
+    <Stack direction="row">
+      <div style={{ width: '100px' }}>
         <p className="filter">Category</p>
       </div>
       <FormControl sx={{ m: 1, width: 300 }}>
@@ -63,15 +65,15 @@ export default function MultipleSelectCheckmarks({ onCategoriesChange }) {
           labelId="multiple-checkbox-label"
           id="multiple-checkbox"
           multiple
-          value={category}
+          value={selectedCategories}
           onChange={handleChange}
           input={<OutlinedInput label="Tag" />}
           renderValue={(selected) => selected.join(', ')}
           MenuProps={MenuProps}
         >
-          {categories.map((categoryName) => (
+          {categories?.map((categoryName) => (
             <MenuItem key={categoryName} value={categoryName}>
-              <Checkbox checked={category.includes(categoryName)} />
+              <Checkbox checked={selectedCategories.includes(categoryName)} />
               <ListItemText primary={categoryName} />
             </MenuItem>
           ))}
