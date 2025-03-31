@@ -1,7 +1,7 @@
 import * as React from 'react';
+import PropTypes from 'prop-types';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
@@ -11,12 +11,13 @@ import Stack from '@mui/material/Stack';
  * @param {function} onAvailabilityChange - Callback to handle changes in availability selection.
  */
 export default function SelectLabels({ onAvailabilityChange }) {
-  const [availability, setAvailability] = React.useState('');
+  const [availability, setAvailability] = React.useState(''); // Default value is an empty string
 
   // Handle changes in the availability dropdown
   const handleChange = (event) => {
-    setAvailability(event.target.value);
-    onAvailabilityChange(event.target.value); // Pass the selected value to the parent component
+    const value = event.target.value;
+    setAvailability(value);
+    onAvailabilityChange(value); // Pass the selected value to the parent component
   };
 
   return (
@@ -25,10 +26,10 @@ export default function SelectLabels({ onAvailabilityChange }) {
         <p className="filter">Availability</p>
       </div>
       <FormControl sx={{ m: 1, minWidth: 300 }}>
-        <InputLabel id="demo-simple-select-helper-label">All</InputLabel>
+        <InputLabel id="availability-select-label">All</InputLabel>
         <Select
-          labelId="demo-simple-select-helper-label"
-          id="demo-simple-select-helper"
+          labelId="availability-select-label"
+          id="availability-select"
           value={availability}
           label="Availability"
           onChange={handleChange}
@@ -44,3 +45,8 @@ export default function SelectLabels({ onAvailabilityChange }) {
     </Stack>
   );
 }
+
+// PropTypes for validation
+SelectLabels.propTypes = {
+  onAvailabilityChange: PropTypes.func.isRequired,
+};

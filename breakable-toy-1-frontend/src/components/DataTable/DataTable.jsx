@@ -8,13 +8,21 @@ import EditDialog from './EditDialog'; // Import the EditDialog component
 import DeleteDialog from './DeleteDialog'; // Import the DeleteDialog component
 import { handleRowSelection } from '../../utils/rowSelectionHandler'; // Import the row selection handler
 import { fetchProducts } from '../../api/api'; // Import the fetchProducts function
+import { GlobalContext } from '../../context/GlobalContext'; // Import the GlobalContext
 
-export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
+export default function DataTable() {
+  // Access global state using the GlobalContext
+  const {
+    refreshSignal,
+    deleteSuccess,
+    newFilter,
+    setDeleteSuccess,
+  } = React.useContext(GlobalContext);
+
   // State variables
   const [products, setProducts] = React.useState([]); // Stores the product data
   const [error, setError] = React.useState(null); // Stores any errors
   const [loading, setLoading] = React.useState(true); // Tracks loading state
-  const [page, setPage] = React.useState(0); // Current page for pagination
   const [rowCount, setRowCount] = React.useState(0); // Total number of rows
   const [paginationModel, setPaginationModel] = React.useState({
     page: 0,
@@ -127,7 +135,7 @@ export default function DataTable({ refreshSignal, deleteSuccess, newFilter }) {
         onClose={handleDeleteClose}
         deleteId={deleteId}
         setProducts={setProducts}
-        deleteSuccess={deleteSuccess}
+        deleteSuccess={setDeleteSuccess} // Update delete success in global context
       />
 
       {/* Edit Dialog */}
