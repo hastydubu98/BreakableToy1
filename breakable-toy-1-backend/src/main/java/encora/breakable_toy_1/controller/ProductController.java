@@ -1,5 +1,7 @@
 package encora.breakable_toy_1.controller;
 
+import encora.breakable_toy_1.dto.ProductDTO;
+import encora.breakable_toy_1.factory.ProductFactory;
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.service.ProductService;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.function.Predicate;
+
+import javax.validation.Valid;
 
 @RestController
 public class ProductController {
@@ -41,32 +45,14 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public Product createProduct(@RequestBody Product product) {
-
-        try {
-
-            if (product.getName().length() > 120) {
-                throw new ProductCreationException("Product name must have less than 120 characters");
-            }
-
-            if (Objects.equals(product.getCategory(), "")) {
-                throw new ProductCreationException("Product name must be provided");
-            }
-
-            if ( Objects.equals(product.getName(), "")) {
-                throw new ProductCreationException("Product category must be provided");
-            }
-
-            return productService.createProduct(
-                    product.getCategory(),
-                    product.getName(),
-                    product.getPrice(),
-                    product.getExpirationDate(),
-                    product.getStock()
-            );
-        } catch (Exception e) {
-            throw new ProductCreationException("Error creating product: " + e.getMessage());
-        }
+    public Product createProduct(@Valid @RequestBody ProductDTO productDTO) {
+        return productService.createProduct(
+                productDTO.getCategory(),
+                productDTO.getName(),
+                productDTO.getPrice(),
+                productDTO.getExpirationDate(),
+                productDTO.getStock()
+        );
     }
 
     @DeleteMapping("/delete")
@@ -75,7 +61,15 @@ public class ProductController {
     }
 
     @PutMapping("/products/{id}")
-    public Product updateProduct(@PathVariable long id, @RequestBody Product product) {
+    public Product updateProduct(@PathVariable long id, @Valid @RequestBody ProductDTO productDTO) {
+        Product product = ProductFactory.createProductWithValues(
+                id,
+                productDTO.getCategory(),
+                productDTO.getName(),
+                productDTO.getPrice(),
+                productDTO.getExpirationDate(),
+                productDTO.getStock()
+        );
         return productService.updateProduct(id, product);
     }
 
@@ -107,28 +101,7 @@ public class ProductController {
 
         products = new ArrayList<>(products);
 
-        Comparator<Product> comparator;
-
-        switch (sortBy) {
-            case "category":
-                comparator = Comparator.comparing(Product::getCategory);
-                break;
-            case "name":
-                comparator = Comparator.comparing(Product::getName);
-                break;
-            case "price":
-                comparator = Comparator.comparing(Product::getPrice);
-                break;
-            case "expirationDate":
-                comparator = Comparator.comparing(Product::getExpirationDate, Comparator.nullsFirst(Comparator.naturalOrder()));
-                break;
-            case "stock":
-                comparator = Comparator.comparing(Product::getStock);
-                break;
-            default:
-                comparator = Comparator.comparing(Product::getId);
-                break;
-        }
+        Comparator<Product> comparator = getComparator(sortBy);
 
         if ("desc".equalsIgnoreCase(direction)) {
             comparator = comparator.reversed();
@@ -143,6 +116,23 @@ public class ProductController {
         Page<Product> pageProducts = new PageImpl<>(subList, pageable, products.size());
 
         return pagedResourcesAssembler.toModel(pageProducts);
+    }
+
+    private Comparator<Product> getComparator(String sortBy) {
+        switch (sortBy) {
+            case "category":
+                return Comparator.comparing(Product::getCategory);
+            case "name":
+                return Comparator.comparing(Product::getName);
+            case "price":
+                return Comparator.comparing(Product::getPrice);
+            case "expirationDate":
+                return Comparator.comparing(Product::getExpirationDate, Comparator.nullsFirst(Comparator.naturalOrder()));
+            case "stock":
+                return Comparator.comparing(Product::getStock);
+            default:
+                return Comparator.comparing(Product::getId);
+        }
     }
 
     @GetMapping("/filter")

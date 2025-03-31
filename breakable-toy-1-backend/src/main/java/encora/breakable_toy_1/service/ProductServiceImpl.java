@@ -1,15 +1,10 @@
 package encora.breakable_toy_1.service;
 
+import encora.breakable_toy_1.factory.ProductFactory;
 import encora.breakable_toy_1.model.Product;
 import encora.breakable_toy_1.model.Statistics;
 import encora.breakable_toy_1.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -39,7 +34,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(String category, String name, double price, LocalDate expirationDate, long stock) {
-       return productRepository.create(category, name, price, expirationDate, stock);
+        return productRepository.create(category, name, price, expirationDate, stock);
     }
 
     @Override
@@ -72,36 +67,28 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Map<String, Statistics> total() {
-
         final List<Product> products = getAllProducts();
-
         final Map<String, Statistics> total = new HashMap<>();
 
-        Statistics sum = new Statistics(0,0,0);
-
+        Statistics sum = new Statistics(0, 0, 0);
         total.put("Total", sum);
 
-        for(Product product : products)  {
-
+        for (Product product : products) {
             double totalValue = Math.round((product.getStock() * product.getPrice()) * 100.0) / 100.0;
             double average = Math.round((totalValue / product.getStock()) * 100.0) / 100.0;
 
             if (total.containsKey(product.getCategory())) {
-
-                double totalStock =  total.get(product.getCategory()).getTotalStocks();
+                double totalStock = total.get(product.getCategory()).getTotalStocks();
                 double oldTotalValue = total.get(product.getCategory()).getTotalValue();
-                double newAverage  = (oldTotalValue + totalValue) / (totalStock + product.getStock());
+                double newAverage = (oldTotalValue + totalValue) / (totalStock + product.getStock());
 
                 total.get(product.getCategory()).setTotalStocks(totalStock + product.getStock());
                 total.get(product.getCategory()).setTotalValue(oldTotalValue + totalValue);
                 total.get(product.getCategory()).setAverage(newAverage);
 
             } else {
-
                 final Statistics statistics = new Statistics((double) product.getStock(), totalValue, average);
-
                 total.put(product.getCategory(), statistics);
-
             }
 
             double oldOverallStocks = total.get("Total").getTotalStocks();
@@ -113,12 +100,9 @@ public class ProductServiceImpl implements ProductService {
             total.get("Total").setTotalValue(newOverallValue);
 
             double newOverallAverage = Math.round((newOverallValue / newOverallStocks) * 100.0) / 100.0;
-
             total.get("Total").setAverage(newOverallAverage);
-
         }
 
         return total;
     }
-
 }
